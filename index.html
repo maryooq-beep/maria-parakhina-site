@@ -1,0 +1,4508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <title>Maria Parakhina — Landing</title>
+  <style>
+    @font-face {
+      font-family: "Poiret One";
+      src: url("assets/fonts/poiret-one-regular.ttf") format("truetype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    :root{
+      --paper: #f6f1e8;
+      --paper-2: #efe6da;
+      --ink: #4e3428;
+      --muted: rgba(78, 52, 40, 0.62);
+      --line-1: #8f3d3d;
+      --line-2: #cb6b46;
+      --line-3: #b35f82;
+      --line-4: #5f4d75;
+      --line-5: #9a5e50;
+      --line-6: #c88d66;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--paper);
+    }
+
+    body {
+      font-family: Didot, "Bodoni 72", "Bodoni MT", "Times New Roman", serif;
+      color: var(--ink);
+    }
+
+    html.scroll-ready { overflow-y: auto; overflow-x: hidden; }
+    body.scroll-ready { height: auto; overflow: visible; }
+
+    .page {
+      position: relative;
+      width: 100%;
+      height: 1120vh;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255,255,255,0.55), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(232,220,205,0.35), transparent 24%),
+        linear-gradient(180deg, var(--paper), var(--paper-2));
+      isolation: isolate;
+    }
+
+    /* soft paper texture */
+    .paper-noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.26;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(95,72,52,0.05) 0 0.8px, transparent 1px),
+        radial-gradient(circle at 62% 32%, rgba(95,72,52,0.04) 0 0.7px, transparent 0.95px),
+        radial-gradient(circle at 80% 64%, rgba(95,72,52,0.045) 0 0.9px, transparent 1.1px),
+        radial-gradient(circle at 34% 74%, rgba(95,72,52,0.04) 0 0.75px, transparent 1px);
+      background-size: 210px 210px, 180px 180px, 230px 230px, 160px 160px;
+      mix-blend-mode: multiply;
+    }
+
+    #waterCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.62;
+      mix-blend-mode: multiply;
+      filter: blur(0.2px);
+    }
+
+    #cursorMist {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 2;
+      pointer-events: none;
+      mix-blend-mode: normal;
+    }
+
+    .hero {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 6vw;
+      z-index: 3;
+      will-change: transform, opacity;
+    }
+
+    .title-wrap {
+      width: min(1080px, 90vw);
+      text-align: center;
+      transform: translateY(-1.2vh);
+      position: relative;
+    }
+
+    .name {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: clamp(24px, 3.6vw, 56px);
+      line-height: 0.98;
+      opacity: 0;
+      filter: blur(7px);
+      transform: translateY(10px) scale(0.992);
+      font-family: Didot, "Bodoni 72", "Bodoni MT", "Times New Roman", serif;
+      transition:
+        opacity 7.6s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 7.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 7.6s cubic-bezier(0.16, 1, 0.3, 1);
+      text-wrap: balance;
+    }
+
+    .glint {
+      color: transparent;
+      background: linear-gradient(118deg,
+        var(--ink) 0%,
+        var(--ink) 40%,
+        rgba(255, 250, 239, 0.98) 49%,
+        rgba(178, 139, 121, 0.78) 54%,
+        var(--ink) 64%);
+      background-size: 330% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .reveal .glint {
+      animation: letterGlint 2.2s 1.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .reveal .glint--late {
+      animation-delay: 2.05s;
+    }
+
+    @keyframes letterGlint {
+      0% { background-position: 100% 0; }
+      46%, 100% { background-position: 0% 0; }
+    }
+
+    .subtitle {
+      margin-top: clamp(12px, 1.1vw, 16px);
+      font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+      font-size: clamp(7px, 0.50vw, 10px);
+      font-weight: 500;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      font-style: normal;
+      color: rgba(78, 52, 40, 0.74);
+      opacity: 0.94;
+      transition:
+        opacity 5.8s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 5.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .line {
+      width: min(38vw, 430px);
+      max-width: 100%;
+      height: 1px;
+      margin: clamp(12px, 1.1vw, 16px) auto 0;
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg,
+          var(--line-1) 0%,
+          var(--line-2) 18%,
+          var(--line-3) 36%,
+          var(--line-4) 54%,
+          var(--line-5) 75%,
+          var(--line-6) 100%);
+      opacity: 0;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+      transition:
+        opacity 5.8s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 5.8s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 5.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hint {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(20px, 3vw, 36px);
+      transform: translateX(-50%);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: clamp(11px, 0.95vw, 13px);
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(78, 52, 40, 0.64);
+      opacity: 0.84;
+      z-index: 3;
+      transition: opacity 0.8s ease;
+    }
+
+    .reveal .name {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0) scale(1);
+      transition-duration: 5.4s;
+    }
+
+    .reveal .subtitle {
+      opacity: 0.94;
+      transition-duration: 4.9s;
+    }
+
+    .reveal .line {
+      opacity: 0.92;
+      transition-duration: 5.1s;
+      box-shadow:
+        0 0 18px rgba(188, 116, 102, 0.18),
+        0 0 32px rgba(123, 93, 137, 0.08);
+    }
+
+    .hide-hint .hint {
+      opacity: 0.0;
+    }
+
+    .explore-hint { position: fixed; left: 50%; bottom: clamp(22px,3vw,38px); z-index: 8; transform: translate(-50%,12px); font: 500 9px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif; letter-spacing: .28em; text-transform: uppercase; color: rgba(78,52,40,.62); opacity: 0; transition: opacity 1.8s ease, transform 1.8s ease; pointer-events: none; }
+    body.scroll-ready:not(.portfolio-visible) .explore-hint { opacity: .88; transform: translate(-50%,0); }
+
+    .social-button { width:30px; height:30px; display:grid; place-items:center; padding:0; border:0; border-radius:0; color:rgba(78,52,40,.58); background:transparent; box-shadow:none; cursor:pointer; transition:color .35s ease,transform .5s cubic-bezier(.22,1,.36,1); }
+    .social-button:hover { color:var(--ink); transform:scale(1.16); }
+    .social-button svg { width:25px; height:25px; fill:none; stroke:currentColor; stroke-width:.9; stroke-linecap:round; stroke-linejoin:round; transition:transform .5s cubic-bezier(.22,1,.36,1); }
+    .social-button:hover svg { transform:scale(1.04); }
+
+    /* Fashion study — the dark second scene */
+    .art-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      overflow: visible;
+      color: rgba(244,236,227,.92);
+      background:
+        radial-gradient(ellipse at 14% 28%, rgba(92,8,39,.045), transparent 43%),
+        radial-gradient(ellipse at 82% 76%, rgba(68,5,31,.026), transparent 42%),
+        linear-gradient(138deg, #080708 0%, #040405 52%, #060506 100%);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      will-change: transform, opacity;
+      transition: visibility 0s linear .7s;
+    }
+
+    .art-scene.is-visible {
+      visibility: visible;
+      transition-delay: 0s;
+    }
+
+    .art-scene.is-interactive {
+      pointer-events: auto;
+    }
+
+    .art-scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      pointer-events: none;
+      opacity: .16;
+      mix-blend-mode: soft-light;
+      background-image:
+        radial-gradient(circle at 15% 22%, rgba(255,244,230,.20) 0 .55px, transparent .8px),
+        radial-gradient(circle at 74% 68%, rgba(255,244,230,.16) 0 .5px, transparent .78px);
+      background-size: 150px 150px, 190px 190px;
+    }
+
+    .art-wave {
+      position: absolute;
+      left: -8vw;
+      right: -8vw;
+      top: -15vh;
+      height: 19vh;
+      z-index: 0;
+      pointer-events: none;
+      filter: blur(.55px);
+      background:
+        radial-gradient(ellipse 36% 115% at 5% 100%, #070607 0 58%, rgba(35,5,20,.19) 68%, transparent 80%),
+        radial-gradient(ellipse 44% 116% at 38% 100%, #050506 0 61%, rgba(29,4,17,.17) 70%, transparent 82%),
+        radial-gradient(ellipse 38% 114% at 72% 100%, #060506 0 59%, rgba(34,5,19,.17) 69%, transparent 81%),
+        radial-gradient(ellipse 34% 114% at 100% 100%, #040405 0 58%, rgba(26,3,15,.16) 68%, transparent 80%);
+    }
+
+    .art-heading {
+      position: absolute;
+      top: clamp(27px,4.2vh,50px);
+      left: clamp(28px,4.5vw,76px);
+      right: clamp(28px,4.5vw,76px);
+      z-index: 3;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      font-family: "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 1.15s ease .15s,
+        transform 1.35s cubic-bezier(.22,1,.36,1) .15s;
+    }
+
+    .art-kicker,
+    .art-heading-note {
+      margin: 0;
+      font: 400 clamp(7px,.52vw,9px)/1.55 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .27em;
+      text-transform: uppercase;
+      color: rgba(244,236,227,.58);
+    }
+
+    .art-title {
+      margin: 10px 0 0;
+      font: 300 clamp(24px,2.25vw,38px)/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      color: rgba(244,236,227,.95);
+    }
+
+    .art-heading-note {
+      max-width: 310px;
+      text-align: right;
+      line-height: 1.8;
+    }
+
+    .art-divider {
+      position: absolute;
+      top: 19vh;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      height: 1.5px;
+      background:
+        linear-gradient(90deg,
+          rgba(144,88,91,.58) 0%,
+          rgba(176,118,99,.50) 18%,
+          rgba(161,105,132,.54) 36%,
+          rgba(112,98,128,.52) 54%,
+          rgba(150,105,101,.48) 75%,
+          rgba(181,137,112,.44) 100%);
+      box-shadow:
+        0 0 10px rgba(179,95,130,.055),
+        0 0 20px rgba(95,77,117,.035);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 1.65s cubic-bezier(.22,1,.36,1) .18s;
+    }
+
+    .art-stage {
+      position: absolute;
+      inset: 19vh 0 0;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(300px,38vw) minmax(0,62vw);
+      min-height: 0;
+    }
+
+    .art-film-panel {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      margin: 0;
+      padding: clamp(18px,2.5vh,28px) clamp(16px,1.8vw,30px) clamp(16px,2vh,24px);
+      display: grid;
+      grid-template-rows: minmax(0,1fr) auto;
+      place-items: center;
+    }
+
+    .art-film-panel::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 5;
+      width: 1.5px;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg,
+          rgba(144,88,91,.58) 0%,
+          rgba(176,118,99,.50) 18%,
+          rgba(161,105,132,.54) 36%,
+          rgba(112,98,128,.52) 54%,
+          rgba(150,105,101,.48) 75%,
+          rgba(181,137,112,.44) 100%);
+      box-shadow:
+        0 0 10px rgba(179,95,130,.05),
+        0 0 18px rgba(95,77,117,.03);
+    }
+
+    .art-film-frame {
+      position: relative;
+      width: min(30.5vw,520px);
+      height: min(70vh,680px);
+      max-width: 100%;
+      overflow: hidden;
+      background: #cfc7bd;
+      box-shadow: 0 30px 80px rgba(0,0,0,.28);
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path 1.75s cubic-bezier(.72,0,.22,1) .12s;
+    }
+
+    .art-film-frame::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -18%;
+      z-index: 2;
+      width: 18%;
+      opacity: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(255,248,235,.38), transparent);
+    }
+
+    .art-film-frame::after,
+    .art-slide-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(39,25,18,.04), transparent 36%, rgba(30,19,14,.12)),
+        radial-gradient(ellipse at 68% 12%, rgba(255,248,237,.12), transparent 38%);
+      mix-blend-mode: multiply;
+    }
+
+    .art-film-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center 22%;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      filter: grayscale(.18) sepia(.13) saturate(.62) brightness(.84) contrast(1.12);
+      transform: none;
+      transition: transform 9s cubic-bezier(.18,.7,.25,1) .6s;
+    }
+
+    .art-film-caption {
+      width: min(30.5vw,520px);
+      max-width: 100%;
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font: 400 7px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: rgba(244,236,227,.54);
+      opacity: 0;
+      transform: translateY(7px);
+      transition: opacity .9s ease 1.22s, transform 1s cubic-bezier(.22,1,.36,1) 1.22s;
+    }
+
+    .art-carousel {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      cursor: grab;
+      touch-action: pan-y pinch-zoom;
+      user-select: none;
+      outline: none;
+    }
+
+    .art-carousel:focus-visible {
+      box-shadow: inset 0 0 0 1px rgba(244,236,227,.28);
+    }
+
+    .art-carousel.is-dragging {
+      cursor: grabbing;
+    }
+
+    .art-carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+
+    .art-slide {
+      position: relative;
+      z-index: 1;
+      flex: 0 0 33.333333%;
+      min-width: 0;
+      height: 100%;
+      padding: clamp(16px,2.8vh,30px) 0;
+      display: grid;
+      place-items: center;
+      overflow: visible;
+    }
+
+    .art-slide.is-center {
+      z-index: 3;
+    }
+
+    .art-slide-frame {
+      position: relative;
+      width: clamp(240px,28.5vw,480px);
+      max-width: none;
+      aspect-ratio: 1272 / 1800;
+      overflow: hidden;
+      background: #cbc3b9;
+      box-shadow: 0 26px 58px rgba(0,0,0,.26);
+      opacity: .16;
+      transform: scale(.74) translateY(16px);
+      transition:
+        opacity .52s ease,
+        transform .66s cubic-bezier(.22,1,.36,1);
+    }
+
+    .art-scene.is-copy-visible .art-slide.is-neighbour .art-slide-frame {
+      opacity: .46;
+      transform: scale(.82) translateY(0);
+    }
+
+    .art-scene.is-copy-visible .art-slide.is-center .art-slide-frame {
+      opacity: 1;
+      transform: scale(1.055) translateY(0);
+    }
+
+    .art-slide img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      user-select: none;
+      -webkit-user-drag: none;
+      filter: grayscale(.05) sepia(.065) saturate(.80) brightness(.91) contrast(1.04);
+      transform: scale(1.006);
+      transition: transform .66s cubic-bezier(.22,1,.36,1);
+    }
+
+    .art-slide.is-center img {
+      transform: scale(1);
+    }
+
+    .art-carousel.is-dragging .art-slide-frame,
+    .art-carousel.is-dragging .art-slide img {
+      transition: none !important;
+    }
+
+    .art-carousel-meta {
+      position: absolute;
+      left: clamp(18px,2.5vw,38px);
+      right: clamp(18px,2.5vw,38px);
+      bottom: clamp(16px,2.5vh,28px);
+      z-index: 6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      font: 400 7px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: rgba(244,236,227,.53);
+      opacity: 0;
+      transition: opacity .9s ease .5s;
+    }
+
+    .art-counter {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .art-scene.is-copy-visible .art-heading {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .art-scene.is-awake .art-divider {
+      transform: scaleX(1);
+    }
+
+    .art-scene.is-awake .art-film-frame {
+      clip-path: inset(0 0 0 0);
+    }
+
+    .art-scene.is-awake .art-film-frame::before {
+      animation: artFilmLight 1.7s .12s cubic-bezier(.72,0,.22,1) both;
+    }
+
+    .art-scene.is-awake .art-film-image {
+      transform: scale(1);
+    }
+
+    .art-scene.is-awake .art-film-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .art-scene.is-copy-visible .art-carousel-meta {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .art-scene.is-copy-visible:not(.is-ready) .art-slide.is-center .art-slide-frame {
+      transition-delay: .12s;
+    }
+
+    .art-scene.is-copy-visible:not(.is-ready) .art-slide.is-neighbour .art-slide-frame {
+      transition-delay: .38s;
+    }
+
+    @keyframes artFilmLight {
+      0% { left: -18%; opacity: 0; }
+      18% { opacity: .74; }
+      82% { opacity: .28; }
+      100% { left: 102%; opacity: 0; }
+    }
+
+    body.art-visible:not(.portfolio-visible) .explore-hint {
+      color: rgba(244,236,227,.62);
+    }
+
+    .portfolio {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: visibility 0s linear .8s;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255,255,255,0.55), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(232,220,205,0.35), transparent 24%),
+        linear-gradient(180deg, var(--paper), var(--paper-2));
+      will-change: transform, opacity;
+    }
+    .portfolio::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .26;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(95,72,52,.05) 0 .8px, transparent 1px),
+        radial-gradient(circle at 62% 32%, rgba(95,72,52,.04) 0 .7px, transparent .95px),
+        radial-gradient(circle at 80% 64%, rgba(95,72,52,.045) 0 .9px, transparent 1.1px),
+        radial-gradient(circle at 34% 74%, rgba(95,72,52,.04) 0 .75px, transparent 1px);
+      background-size: 210px 210px, 180px 180px, 230px 230px, 160px 160px;
+      mix-blend-mode: multiply;
+    }
+    .portfolio.is-visible { visibility: visible; transition-delay: 0s; }
+    .portfolio.is-interactive { pointer-events: auto; }
+    .experience-copy { position: absolute; top: 50%; left: clamp(48px,6vw,118px); width: min(30vw,480px); transform: translateY(-50%); font-family:"Avenir Next","Helvetica Neue",Arial,sans-serif; }
+    .experience-kicker { margin: 0 0 24px; font: 400 9px/1.4 "Avenir Next","Helvetica Neue",Arial,sans-serif; letter-spacing: .28em; text-transform: uppercase; color: rgba(78,52,40,.48); }
+    .experience-list { list-style: none; padding: 0; margin: 0; }
+    .experience-list li { display:flex; flex-direction:column; align-items:flex-start; gap:10px; padding:clamp(20px,1.9vw,29px) 0; border-top:1px solid rgba(78,52,40,.13); font-family:inherit; font-size:clamp(10px,.82vw,13px); font-weight:400; line-height:1.45; letter-spacing:.18em; text-transform:uppercase; color:rgba(78,52,40,.66); opacity:0; transform:translateX(16px); transition:opacity .55s ease,transform .7s cubic-bezier(.22,1,.36,1); }
+    .portfolio.is-visible .experience-list li { opacity: .9; filter: blur(0); transform: translateX(0); }
+    .portfolio.is-visible .experience-list li:nth-child(2) { transition-delay: .04s; }
+    .portfolio.is-visible .experience-list li:nth-child(3) { transition-delay: .08s; }
+    .portfolio.is-visible .experience-list li:nth-child(4) { transition-delay: .12s; }
+    .experience-list strong { display:block; min-width:0; margin:0; font-family:inherit; font-weight:300; font-size:clamp(25px,2.55vw,42px); line-height:1; letter-spacing:.045em; text-transform:none; font-style:normal; color:rgba(78,52,40,.94); }
+    .experience-list span { display:block; }
+
+    .film-window { position: absolute; top: 0; right: 0; width: 60vw; height: 100vh; overflow: hidden; background: transparent; border-radius: 0; box-shadow: none; transform: none; opacity: 1; transition: none; -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 5%,#000 95%,transparent 100%); mask-image:linear-gradient(to bottom,transparent 0,#000 5%,#000 95%,transparent 100%); }
+    .portfolio.is-visible .film-window { opacity: 1; transform: none; }
+    .film-window::before,.film-window::after { content:""; position:absolute; left:0; right:0; height:6%; z-index:3; pointer-events:none; }
+    .film-window::before { top:0; background:linear-gradient(rgba(246,241,232,.38),transparent); }
+    .film-window::after { bottom:0; background:linear-gradient(transparent,rgba(246,241,232,.38)); }
+    .film-track { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0; height:100%; padding:0; overflow:hidden; }
+    .film-column { display:flex; flex-direction:column; gap:0; min-width:0; animation:columnRoll 96s linear infinite; animation-play-state:paused; will-change:transform; backface-visibility:hidden; transform:translate3d(0,0,0); }
+    .film-column:nth-child(2) { animation-duration:108s; animation-delay:-24s; }
+    .portfolio.is-visible .film-column { animation-play-state:running; }
+    @keyframes columnRoll { from { transform:translate3d(0,0,0); } to { transform:translate3d(0,-50%,0); } }
+    .film-frame { position:relative; flex:0 0 auto; min-width:0; height:48vh; overflow:hidden; background:#d8d0c6; }
+    .film-column .film-frame:nth-child(4n+1) { height:42vh; }
+    .film-column .film-frame:nth-child(4n+2) { height:57vh; }
+    .film-column .film-frame:nth-child(4n+3) { height:49vh; }
+    .film-column .film-frame:nth-child(4n+4) { height:63vh; }
+    .film-column:nth-child(2) .film-frame:nth-child(4n+1) { height:56vh; }
+    .film-column:nth-child(2) .film-frame:nth-child(4n+2) { height:45vh; }
+    .film-column:nth-child(2) .film-frame:nth-child(4n+3) { height:61vh; }
+    .film-column:nth-child(2) .film-frame:nth-child(4n+4) { height:49vh; }
+    .film-frame::before,.film-frame::after { content:""; position:absolute; top:-2px; bottom:-2px; width:8px; z-index:2; background:repeating-linear-gradient(to bottom,#2f2521 0 9px,transparent 9px 18px); pointer-events:none; }
+    .film-frame::before,.film-frame::after { display:none; }
+    .film-frame img,.film-frame video { width:100%; height:100%; display:block; object-fit:cover; filter:grayscale(1) contrast(.92) brightness(.96) sepia(.08); transform:none; transition:filter 1.45s cubic-bezier(.22,1,.36,1); }
+    .film-frame.focus-bottom { height:74vh !important; }
+    .film-frame.focus-bottom img { object-position:center bottom; }
+    .film-frame.crop-process img { object-position: left 18%; transform:scale(1.16); transform-origin:left center; }
+    .film-frame.crop-process:hover img { transform:scale(1.16); }
+    .film-frame.natural img,.film-frame.natural video { filter:saturate(.78) contrast(.96); }
+    .film-frame:hover img,.film-frame:hover video { filter:grayscale(0) contrast(1) brightness(1) sepia(0) saturate(1); }
+    .film-frame.stabilized-motion video,
+    .film-frame.stabilized-motion:hover video { transform:scale(1.11); transform-origin:center; }
+    @media (prefers-reduced-motion:reduce) { .film-column { animation-play-state:paused; } }
+
+    /* Art gallery gateway — a quiet paper pause before the archive */
+    .gallery-gateway {
+      position: fixed;
+      inset: 0;
+      z-index: 6;
+      overflow: hidden;
+      visibility: hidden;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255,255,255,.58), transparent 29%),
+        radial-gradient(circle at 82% 82%, rgba(229,216,201,.34), transparent 26%),
+        linear-gradient(180deg, var(--paper), var(--paper-2));
+      will-change: transform;
+    }
+
+    .gallery-gateway.is-visible {
+      visibility: visible;
+    }
+
+    .gallery-gateway::after,
+    .skills-scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      opacity: .22;
+      mix-blend-mode: multiply;
+      background-image:
+        radial-gradient(circle at 12% 18%, rgba(95,72,52,.05) 0 .8px, transparent 1px),
+        radial-gradient(circle at 62% 32%, rgba(95,72,52,.04) 0 .7px, transparent .95px),
+        radial-gradient(circle at 80% 64%, rgba(95,72,52,.045) 0 .9px, transparent 1.1px);
+      background-size: 210px 210px, 180px 180px, 230px 230px;
+    }
+
+    .gateway-dark-wipe {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(ellipse at 18% 28%, rgba(83,9,35,.038), transparent 43%),
+        radial-gradient(ellipse at 81% 76%, rgba(68,6,30,.025), transparent 42%),
+        linear-gradient(138deg, #080708 0%, #040405 52%, #060506 100%);
+      will-change: transform;
+    }
+
+    .gateway-art-word {
+      position: absolute;
+      top: 49%;
+      left: 0;
+      z-index: 4;
+      margin: 0;
+      white-space: nowrap;
+      color: rgba(48,31,27,.98);
+      font: 400 clamp(230px,49vw,790px)/.72 "Poiret One","Helvetica Neue",Helvetica,Arial,sans-serif;
+      letter-spacing: .025em;
+      text-transform: uppercase;
+      text-shadow: 0 12px 44px rgba(56,35,27,.07);
+      will-change: transform, opacity;
+    }
+
+    .gateway-macro {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 3;
+      width: min(46vw,760px);
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background: #b5aa9e;
+      box-shadow: 0 0 80px rgba(16,10,8,.24);
+      will-change: transform, clip-path;
+    }
+
+    .gateway-macro img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      filter: saturate(.72) contrast(.94) brightness(.92) sepia(.035);
+      transform: scale(1.025);
+    }
+
+    .gateway-macro figcaption {
+      position: absolute;
+      left: clamp(20px,2vw,34px);
+      bottom: clamp(20px,2vw,34px);
+      z-index: 2;
+      font: 400 7px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: rgba(246,241,232,.64);
+      text-shadow: 0 1px 12px rgba(0,0,0,.38);
+    }
+
+    /* Horizontal art archive */
+    .work-gallery {
+      position: fixed;
+      inset: 0;
+      z-index: 7;
+      overflow: hidden;
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      color: rgba(245,238,230,.92);
+      background:
+        radial-gradient(ellipse at 16% 24%, rgba(84,9,37,.032), transparent 42%),
+        radial-gradient(ellipse at 84% 78%, rgba(62,5,27,.022), transparent 38%),
+        linear-gradient(138deg, #080708 0%, #040405 53%, #060506 100%);
+      will-change: opacity;
+    }
+
+    .work-gallery.is-visible {
+      visibility: visible;
+    }
+
+    .work-gallery.is-interactive {
+      pointer-events: auto;
+    }
+
+    .work-gallery-grain {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: .11;
+      mix-blend-mode: soft-light;
+      background-image:
+        radial-gradient(circle at 15% 22%, rgba(255,244,230,.2) 0 .55px, transparent .8px),
+        radial-gradient(circle at 74% 68%, rgba(255,244,230,.15) 0 .5px, transparent .78px);
+      background-size: 150px 150px, 190px 190px;
+    }
+
+    .work-gallery-rail {
+      position: absolute;
+      inset: 0 auto 0 0;
+      z-index: 2;
+      display: flex;
+      width: max-content;
+      height: 100vh;
+      will-change: transform;
+    }
+
+    .gallery-series {
+      position: relative;
+      flex: 0 0 116vw;
+      width: 116vw;
+      height: 100vh;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .gallery-series::after {
+      content: "";
+      position: absolute;
+      top: 7vh;
+      right: 0;
+      bottom: 7vh;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(242,232,222,.16) 22%, rgba(242,232,222,.16) 78%, transparent);
+    }
+
+    .gallery-series--body { flex-basis: 112vw; width: 112vw; }
+    .gallery-series--stillness { flex-basis: 108vw; width: 108vw; }
+    .gallery-series--elsewhere { flex-basis: 116vw; width: 116vw; }
+    .gallery-series--observations { flex-basis: 122vw; width: 122vw; }
+
+    .gallery-series-caption {
+      position: absolute;
+      z-index: 8;
+      top: clamp(28px,6.2vh,62px);
+      left: clamp(28px,4.8vw,76px);
+      max-width: 30vw;
+      font-family: "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      pointer-events: none;
+    }
+
+    .gallery-series-caption span {
+      display: block;
+      margin-bottom: 13px;
+      font: 400 7px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .28em;
+      color: rgba(244,236,227,.38);
+    }
+
+    .gallery-series-caption h2 {
+      margin: 0;
+      font: 300 clamp(18px,1.62vw,28px)/1.12 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(244,236,227,.79);
+    }
+
+    .gallery-series-caption p {
+      margin: 12px 0 0;
+      font: 400 7px/1.5 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(244,236,227,.31);
+    }
+
+    .gallery-work {
+      position: absolute;
+      z-index: 2;
+      margin: 0;
+      overflow: hidden;
+      background: transparent;
+      box-shadow: 0 28px 82px rgba(0,0,0,.32);
+      cursor: crosshair;
+      outline: none;
+    }
+
+    .gallery-work:focus-visible {
+      box-shadow:
+        0 28px 82px rgba(0,0,0,.32),
+        0 0 0 1px rgba(170,116,126,.42);
+    }
+
+    .gallery-work img,
+    .gallery-v-slot img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+      filter: grayscale(1) sepia(.08) saturate(.25) contrast(.9) brightness(.74);
+      transform: none;
+      transition:
+        filter 1.05s cubic-bezier(.22,1,.36,1),
+        transform 1.45s cubic-bezier(.22,1,.36,1),
+        opacity .75s ease;
+    }
+
+    .gallery-work::after,
+    .gallery-v-slot::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(12,8,7,.04), transparent 42%, rgba(9,6,5,.14)),
+        radial-gradient(ellipse at 65% 8%, rgba(255,247,237,.08), transparent 36%);
+      mix-blend-mode: multiply;
+      opacity: .75;
+      transition: opacity 1s ease;
+    }
+
+    .gallery-work:hover img,
+    .gallery-work.is-colour img,
+    .gallery-v-slot:hover img,
+    .gallery-v-slot.is-colour img {
+      filter: grayscale(0) sepia(.02) saturate(.82) contrast(.98) brightness(.91);
+      transform: none;
+    }
+
+    .gallery-work:hover::after,
+    .gallery-work.is-colour::after,
+    .gallery-v-slot:hover::after,
+    .gallery-v-slot.is-colour::after {
+      opacity: .18;
+    }
+
+    .gallery-work figcaption {
+      position: absolute;
+      left: 12px;
+      bottom: 11px;
+      z-index: 4;
+      font: 400 6px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .24em;
+      color: rgba(247,239,231,.56);
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity .7s ease, transform .8s cubic-bezier(.22,1,.36,1);
+      text-shadow: 0 1px 10px rgba(0,0,0,.45);
+    }
+
+    .gallery-work:hover figcaption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .gallery-series--cosmologies .work-02 { left: 5vw; top: 26vh; width: 26vw; height: 60vh; }
+    .gallery-series--cosmologies .work-03 { left: 35vw; top: 15vh; width: 45vw; height: 82vh; }
+    .gallery-series--cosmologies .work-04 { left: 83vw; top: 21vh; width: 30vw; height: 70vh; }
+
+    .gallery-series--body .gallery-series-caption { left: 43vw; top: 9vh; }
+    .gallery-series--body .work-05 { left: 4vw; top: 27vh; width: 56vw; height: 64vh; }
+    .gallery-series--body .work-06 { left: 64vw; top: 5vh; width: 43vw; height: 90vh; }
+    .gallery-series--body .work-06 img { object-position: 53% center; }
+
+    .gallery-series--stillness .gallery-series-caption { left: 42vw; top: 18vh; }
+    .gallery-series--stillness .work-07 { left: 5vw; top: 10vh; width: 31vw; height: 66vh; }
+    .gallery-series--stillness .work-08 { left: 59vw; top: 23vh; width: 36vw; height: 70vh; }
+
+    .gallery-series--elsewhere .gallery-series-caption { left: 44vw; top: 7vh; }
+    .gallery-series--elsewhere .work-09 { left: 5vw; top: 12vh; width: 35vw; height: 78vh; }
+    .gallery-series--elsewhere .work-10 { left: 45vw; top: 23vh; width: 63vw; height: 66vh; }
+
+    .gallery-series--observations .gallery-series-caption { left: 5vw; top: 9vh; max-width: 26vw; }
+
+    /* Manual vertical loop for the five-work Observations series */
+    .gallery-vertical-carousel {
+      position: absolute;
+      inset: 0 0 0 29vw;
+      z-index: 5;
+      overflow: hidden;
+      cursor: grab;
+      touch-action: pan-y pinch-zoom;
+      user-select: none;
+      outline: none;
+    }
+
+    .gallery-vertical-carousel.is-dragging {
+      cursor: grabbing;
+    }
+
+    .gallery-vertical-carousel:focus-visible {
+      box-shadow: inset 0 0 0 1px rgba(244,236,227,.24);
+    }
+
+    .gallery-v-slots {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      transform: translate3d(0,0,0);
+      transition: none;
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+
+    .gallery-vertical-carousel.is-settling .gallery-v-slots {
+      transition: transform .66s cubic-bezier(.22,1,.36,1);
+    }
+
+    .gallery-vertical-carousel.is-settling-back .gallery-v-slots {
+      transition-duration: .34s;
+    }
+
+    .gallery-vertical-carousel.is-dragging .gallery-v-slots,
+    .gallery-vertical-carousel.is-resetting .gallery-v-slots {
+      transition: none !important;
+    }
+
+    .gallery-v-slot {
+      position: relative;
+      flex: 0 0 56vh;
+      width: 100%;
+      height: 56vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      overflow: visible;
+      border: 0;
+      padding: 0;
+      background: none;
+      box-shadow: none;
+      opacity: .12;
+      transition: opacity .48s cubic-bezier(.22,1,.36,1);
+    }
+
+    .gallery-v-slot.is-neighbour {
+      opacity: .42;
+    }
+
+    .gallery-v-slot.is-active {
+      z-index: 3;
+      opacity: 1;
+    }
+
+    .gallery-v-slot img {
+      width: auto;
+      height: auto;
+      max-width: min(60vw,980px);
+      max-height: 64vh;
+      object-fit: contain;
+      background: transparent;
+      transform: none !important;
+      box-shadow: 0 28px 78px rgba(0,0,0,.34);
+    }
+
+    .gallery-v-slot:hover img,
+    .gallery-v-slot.is-colour img {
+      transform: none !important;
+    }
+
+    .gallery-v-slot::after {
+      display: none;
+    }
+
+    .gallery-v-meta {
+      position: absolute;
+      left: 3vw;
+      right: 3vw;
+      bottom: 3.4vh;
+      z-index: 8;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      font: 400 7px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: rgba(244,236,227,.4);
+    }
+
+    .gallery-progress {
+      position: absolute;
+      left: clamp(26px,3vw,48px);
+      right: clamp(26px,3vw,48px);
+      bottom: clamp(18px,2.2vh,28px);
+      z-index: 24;
+      height: 1px;
+      overflow: hidden;
+      background: rgba(244,236,227,.1);
+    }
+
+    .gallery-progress span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform: scaleX(0);
+      transform-origin: left;
+      background:
+        linear-gradient(90deg,
+          rgba(144,88,91,.54),
+          rgba(176,118,99,.46),
+          rgba(161,105,132,.50),
+          rgba(112,98,128,.48),
+          rgba(181,137,112,.42));
+      will-change: transform;
+    }
+
+    /* Final practice / skills spread */
+    .skills-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 9;
+      overflow: hidden;
+      visibility: hidden;
+      pointer-events: none;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255,255,255,.58), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(232,220,205,.35), transparent 24%),
+        linear-gradient(180deg, var(--paper), var(--paper-2));
+      will-change: transform;
+    }
+
+    .skills-scene.is-visible {
+      visibility: visible;
+    }
+
+    .skills-scene.is-interactive {
+      pointer-events: auto;
+    }
+
+    .skills-copy {
+      position: absolute;
+      left: clamp(36px,6vw,105px);
+      top: 50%;
+      z-index: 3;
+      width: min(42vw,680px);
+      font-family: "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      transform: translateY(-50%);
+      will-change: opacity, transform;
+    }
+
+    .skills-kicker {
+      margin: 0 0 clamp(28px,4.5vh,52px);
+      font: 400 8px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: rgba(78,52,40,.48);
+    }
+
+    .skills-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-bottom: 1px solid rgba(78,52,40,.14);
+    }
+
+    .skills-list li {
+      padding: clamp(12px,1.7vh,20px) 0;
+      border-top: 1px solid rgba(78,52,40,.14);
+      font: 300 clamp(13px,1.08vw,18px)/1.3 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .045em;
+      color: rgba(78,52,40,.84);
+    }
+
+    .skills-contact {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-top: clamp(28px,4vh,46px);
+    }
+
+    .skills-contact-copy {
+      display: grid;
+      gap: 10px;
+    }
+
+    .skills-contact-label {
+      font: 400 7px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: rgba(78,52,40,.42);
+    }
+
+    .skills-email {
+      color: rgba(78,52,40,.88);
+      font: 400 clamp(11px,.9vw,15px)/1.2 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .055em;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(78,52,40,.26);
+      padding-bottom: 4px;
+      transition: color .35s ease, border-color .35s ease;
+    }
+
+    .skills-email:hover {
+      color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .skills-socials {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .skills-portrait {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      width: 45vw;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background: #171313;
+      box-shadow: -28px 0 76px rgba(61,38,29,.12);
+      will-change: clip-path, transform, opacity;
+    }
+
+    .skills-portrait img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: 52% center;
+      filter: grayscale(.72) sepia(.08) saturate(.52) brightness(.82) contrast(1.04);
+      transform: scale(1.03);
+      transition: filter 1.2s ease, transform 2s cubic-bezier(.22,1,.36,1);
+    }
+
+    .skills-portrait:hover img {
+      filter: grayscale(.08) sepia(.02) saturate(.78) brightness(.9) contrast(1.02);
+      transform: scale(1);
+    }
+
+    .skills-portrait figcaption {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      font: 400 7px/1 "Avenir Next","Helvetica Neue",Arial,sans-serif;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: rgba(246,241,232,.46);
+      text-shadow: 0 1px 10px rgba(0,0,0,.4);
+    }
+
+    .cycle-curtain {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      pointer-events: none;
+      visibility: hidden;
+      opacity: 0;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255,255,255,.55), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(232,220,205,.35), transparent 24%),
+        linear-gradient(180deg, var(--paper), var(--paper-2));
+      transition:
+        opacity .42s cubic-bezier(.22,1,.36,1),
+        visibility 0s linear .42s;
+    }
+
+    .cycle-curtain.is-active {
+      visibility: visible;
+      opacity: 1;
+      transition-delay: 0s;
+    }
+
+    @media (max-width: 800px) {
+      .title-wrap {
+        width: min(92vw, 700px);
+      }
+
+      .name {
+        letter-spacing: 0.10em;
+      }
+
+      .subtitle {
+        letter-spacing: 0.08em;
+      }
+
+      .line {
+        width: min(72vw, 440px);
+      }
+
+      .art-heading {
+        top: 22px;
+        left: 20px;
+        right: 20px;
+        align-items: flex-start;
+      }
+
+      .art-title {
+        margin-top: 7px;
+        font-size: clamp(17px,4.8vw,26px);
+        letter-spacing: .08em;
+      }
+
+      .art-heading-note {
+        max-width: 42vw;
+        font-size: 6px;
+        letter-spacing: .16em;
+        line-height: 1.6;
+      }
+
+      .art-divider {
+        top: 16vh;
+      }
+
+      .art-stage {
+        inset: 16vh 0 0;
+        grid-template-columns: 42vw 58vw;
+      }
+
+      .art-film-panel {
+        padding: 14px 7px 16px;
+      }
+
+      .art-film-frame,
+      .art-film-caption {
+        width: 38vw;
+      }
+
+      .art-film-frame {
+        height: min(58vh,54vw);
+      }
+
+      .art-film-caption {
+        margin-top: 8px;
+        font-size: 5.5px;
+        letter-spacing: .13em;
+      }
+
+      .art-slide {
+        padding: 5vh 0 8vh;
+      }
+
+      .art-slide-frame {
+        width: min(54vw,290px);
+      }
+
+      .art-carousel-meta {
+        left: 11px;
+        right: 11px;
+        bottom: 16px;
+        font-size: 5.5px;
+        letter-spacing: .16em;
+      }
+
+      .gateway-art-word {
+        font-size: clamp(170px,58vw,360px);
+      }
+
+      .gateway-macro {
+        width: 62vw;
+      }
+
+      .gallery-series {
+        flex-basis: 148vw;
+        width: 148vw;
+      }
+
+      .gallery-series--body,
+      .gallery-series--stillness,
+      .gallery-series--elsewhere {
+        flex-basis: 142vw;
+        width: 142vw;
+      }
+
+      .gallery-series--observations {
+        flex-basis: 158vw;
+        width: 158vw;
+      }
+
+      .gallery-series-caption {
+        left: 6vw;
+        max-width: 48vw;
+      }
+
+      .gallery-series-caption h2 {
+        font-size: clamp(14px,3.7vw,21px);
+      }
+
+      .gallery-series--cosmologies .work-02 { left: 5vw; top: 28vh; width: 37vw; height: 56vh; }
+      .gallery-series--cosmologies .work-03 { left: 46vw; top: 18vh; width: 58vw; height: 76vh; }
+      .gallery-series--cosmologies .work-04 { left: 108vw; top: 24vh; width: 35vw; height: 64vh; }
+
+      .gallery-series--body .gallery-series-caption { left: 52vw; }
+      .gallery-series--body .work-05 { left: 4vw; top: 28vh; width: 69vw; height: 60vh; }
+      .gallery-series--body .work-06 { left: 79vw; width: 57vw; }
+
+      .gallery-series--stillness .gallery-series-caption { left: 54vw; }
+      .gallery-series--stillness .work-07 { left: 5vw; width: 42vw; }
+      .gallery-series--stillness .work-08 { left: 82vw; width: 48vw; }
+
+      .gallery-series--elsewhere .gallery-series-caption { left: 54vw; }
+      .gallery-series--elsewhere .work-09 { left: 5vw; width: 45vw; }
+      .gallery-series--elsewhere .work-10 { left: 57vw; width: 78vw; }
+
+      .gallery-vertical-carousel {
+        left: 37vw;
+      }
+
+      .gallery-v-slot img {
+        max-width: 108vw;
+        max-height: 62vh;
+      }
+
+      .skills-copy {
+        left: 5vw;
+        width: 50vw;
+      }
+
+      .skills-kicker {
+        margin-bottom: 20px;
+        font-size: 6px;
+      }
+
+      .skills-list li {
+        padding: 9px 0;
+        font-size: clamp(9px,2.6vw,13px);
+      }
+
+      .skills-contact {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 20px;
+      }
+
+      .skills-email {
+        max-width: 48vw;
+        overflow-wrap: anywhere;
+        font-size: 9px;
+      }
+
+      .skills-portrait {
+        width: 42vw;
+      }
+
+      .experience-copy { left: 7vw; right: auto; top: 18vh; width: 58vw; }
+      .experience-list li { padding: 9px 0; font-size: clamp(13px,3.4vw,20px); }
+      .experience-kicker { margin-bottom: 14px; font-size: 7px; }
+      .film-window { right: 4vw; top: 38vh; width: 46vw; height: 58vh; }
+      .film-frame { height: 28vh; }
+      .film-frame.focus-bottom { height:44vh !important; }
+      .social-button { width:28px; height:28px; }
+      .social-button svg { width:23px; height:23px; }
+    }
+
+    /* Responsive editions. The desktop composition above remains the reference. */
+    @media (min-width: 801px) and (max-width: 1180px) {
+      .hero {
+        padding: 5vw;
+      }
+
+      .title-wrap {
+        width: min(92vw, 880px);
+      }
+
+      .name {
+        font-size: clamp(29px, 4.2vw, 48px);
+        letter-spacing: .12em;
+      }
+
+      .art-heading {
+        left: 4vw;
+        right: 4vw;
+      }
+
+      .art-stage {
+        grid-template-columns: minmax(270px, 40vw) minmax(0, 60vw);
+      }
+
+      .art-film-frame,
+      .art-film-caption {
+        width: min(35vw, 430px);
+      }
+
+      .art-film-image {
+        object-position: center top;
+      }
+
+      .art-slide-frame {
+        width: clamp(220px, 32vw, 390px);
+      }
+
+      .art-slide {
+        flex: 0 0 68%;
+      }
+
+      .experience-copy {
+        left: 4.5vw;
+        width: 34vw;
+      }
+
+      .experience-list li {
+        padding: clamp(15px, 1.8vh, 23px) 0;
+      }
+
+      .film-window {
+        width: 60vw;
+      }
+
+      .skills-copy {
+        left: 5vw;
+        width: 47vw;
+      }
+
+      .skills-portrait {
+        width: 43vw;
+      }
+    }
+
+    @media (max-width: 800px) {
+      :root {
+        --screen-h: 100svh;
+      }
+
+      html,
+      body,
+      .page,
+      .art-scene,
+      .work-gallery,
+      .skills-scene {
+        touch-action: pan-y pinch-zoom;
+      }
+
+      .hero,
+      .art-scene,
+      .portfolio,
+      .gallery-gateway,
+      .work-gallery,
+      .skills-scene,
+      .work-gallery-rail {
+        min-height: 100svh;
+        min-height: 100dvh;
+      }
+
+      .hero {
+        padding:
+          max(20px, env(safe-area-inset-top))
+          max(16px, env(safe-area-inset-right))
+          max(20px, env(safe-area-inset-bottom))
+          max(16px, env(safe-area-inset-left));
+      }
+
+      .title-wrap {
+        width: min(94vw, 640px);
+      }
+
+      .name {
+        font-size: clamp(20px, 5.8vw, 38px);
+        letter-spacing: .085em;
+        line-height: 1.08;
+      }
+
+      .subtitle {
+        margin-top: 12px;
+        font-size: clamp(6px, 1.8vw, 9px);
+        letter-spacing: .16em;
+        white-space: nowrap;
+      }
+
+      .line {
+        width: min(76vw, 390px);
+        margin-top: 12px;
+      }
+
+      .hint,
+      .explore-hint {
+        bottom: max(18px, calc(env(safe-area-inset-bottom) + 10px));
+        font-size: 8px;
+        letter-spacing: .22em;
+        white-space: nowrap;
+      }
+
+      .art-heading {
+        top: max(18px, calc(env(safe-area-inset-top) + 8px));
+        left: 5vw;
+        right: 5vw;
+        gap: 14px;
+        transform: translate3d(0, calc(14px + var(--art-mobile-shift, 0svh)), 0);
+      }
+
+      .art-scene.is-copy-visible .art-heading {
+        transform: translate3d(0, var(--art-mobile-shift, 0svh), 0);
+      }
+
+      .art-kicker,
+      .art-heading-note {
+        font-size: clamp(5.5px, 1.45vw, 7px);
+      }
+
+      .art-title {
+        font-size: clamp(18px, 5.2vw, 28px);
+      }
+
+      .art-divider {
+        top: 15svh;
+        transform: translate3d(0, var(--art-mobile-shift, 0svh), 0) scaleX(0);
+      }
+
+      .art-scene.is-awake .art-divider {
+        transform: translate3d(0, var(--art-mobile-shift, 0svh), 0) scaleX(1);
+      }
+
+      .art-stage {
+        inset: 15svh 0 auto;
+        height: 170svh;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 85svh 85svh;
+        will-change: transform;
+      }
+
+      .art-film-panel {
+        padding: 0;
+        grid-template-rows: minmax(0, 1fr) auto;
+      }
+
+      .art-film-panel::after {
+        top: auto;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: auto;
+        height: 1px;
+        background: linear-gradient(90deg,
+          rgba(144,88,91,.58),
+          rgba(176,118,99,.5),
+          rgba(161,105,132,.54),
+          rgba(112,98,128,.52),
+          rgba(181,137,112,.44));
+      }
+
+      .art-film-frame,
+      .art-film-caption {
+        width: 100vw;
+      }
+
+      .art-film-frame {
+        height: min(70svh, 142vw);
+        max-width: none;
+        box-shadow: none;
+      }
+
+      .art-film-image {
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      .art-film-caption {
+        min-height: 38px;
+        margin: 0;
+        padding: 13px 5vw 0;
+      }
+
+      .art-carousel {
+        min-height: 0;
+      }
+
+      .art-slide {
+        flex: 0 0 76%;
+        padding: 5svh 0 8svh;
+      }
+
+      .art-slide-frame {
+        width: min(70vw, 390px);
+        max-height: 68svh;
+      }
+
+      .art-carousel-meta {
+        bottom: max(12px, calc(env(safe-area-inset-bottom) + 6px));
+      }
+
+      .experience-copy {
+        top: max(4.5svh, calc(env(safe-area-inset-top) + 12px));
+        left: 7vw;
+        right: 7vw;
+        width: auto;
+        transform: none;
+      }
+
+      .experience-kicker {
+        margin-bottom: 8px;
+        font-size: clamp(5.5px, 1.65vw, 7px);
+        letter-spacing: .22em;
+      }
+
+      .experience-list li {
+        gap: 4px;
+        padding: clamp(7px, 1.15svh, 11px) 0;
+        font-size: clamp(7px, 1.9vw, 10px);
+        line-height: 1.35;
+        letter-spacing: .14em;
+      }
+
+      .experience-list strong {
+        font-size: clamp(20px, 6.2vw, 32px);
+        line-height: 1.05;
+      }
+
+      .film-window {
+        top: 43svh;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: auto;
+        height: auto;
+        min-height: 57svh;
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 2%, #000 98%, transparent 100%);
+        mask-image: linear-gradient(to bottom, transparent 0, #000 2%, #000 98%, transparent 100%);
+      }
+
+      .film-window::before,
+      .film-window::after {
+        height: 2%;
+        opacity: .42;
+      }
+
+      .film-frame,
+      .film-column .film-frame,
+      .film-column:nth-child(2) .film-frame {
+        height: 28svh !important;
+      }
+
+      .film-frame.focus-bottom {
+        height: 38svh !important;
+      }
+
+      .gateway-art-word {
+        top: 50%;
+        font-size: clamp(150px, 58vw, 330px);
+      }
+
+      .gateway-macro {
+        width: 72vw;
+      }
+
+      .gateway-macro figcaption {
+        left: 16px;
+        bottom: max(16px, calc(env(safe-area-inset-bottom) + 8px));
+      }
+
+      .gallery-series-caption {
+        top: max(24px, calc(env(safe-area-inset-top) + 15px));
+      }
+
+      .gallery-series-caption p {
+        margin-top: 8px;
+      }
+
+      .gallery-progress {
+        left: 20px;
+        right: 20px;
+        bottom: max(14px, calc(env(safe-area-inset-bottom) + 7px));
+      }
+
+      .gallery-work figcaption {
+        opacity: .74;
+        transform: none;
+      }
+
+      .skills-portrait {
+        top: 0;
+        right: 0;
+        width: 100vw;
+        height: min(72svh, 149vw);
+        box-shadow: 0 20px 58px rgba(61,38,29,.12);
+      }
+
+      .skills-portrait img {
+        object-fit: cover;
+        object-position: 52% center;
+        transform: none;
+      }
+
+      .skills-portrait figcaption {
+        right: 14px;
+        bottom: 12px;
+        font-size: 5.5px;
+      }
+
+      .skills-copy {
+        top: min(77svh, 154vw);
+        left: 7vw;
+        width: 86vw;
+        transform: none;
+      }
+
+      .skills-kicker {
+        margin-bottom: 13px;
+        font-size: 6px;
+      }
+
+      .skills-list li {
+        padding: clamp(6px, .9svh, 9px) 0;
+        font-size: clamp(9px, 2.8vw, 13px);
+        line-height: 1.22;
+      }
+
+      .skills-contact {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 14px;
+        margin-top: 14px;
+      }
+
+      .skills-contact-copy {
+        gap: 7px;
+        min-width: 0;
+      }
+
+      .skills-contact-label {
+        font-size: 5.5px;
+      }
+
+      .skills-email {
+        max-width: 100%;
+        font-size: clamp(8px, 2.45vw, 11px);
+        overflow-wrap: anywhere;
+      }
+
+      .skills-socials {
+        gap: 2px;
+      }
+
+      .social-button {
+        width: 40px;
+        height: 40px;
+      }
+
+      .social-button svg {
+        width: 21px;
+        height: 21px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .art-heading-note {
+        max-width: 38vw;
+      }
+
+      .gallery-series-caption h2 {
+        font-size: clamp(13px, 4.7vw, 18px);
+      }
+
+      .gallery-series-caption p {
+        font-size: 5.5px;
+      }
+
+      .gallery-v-meta {
+        font-size: 5.5px;
+      }
+
+      .skills-copy {
+        top: min(77svh, 154vw);
+      }
+    }
+
+    @media (max-width: 1000px) and (max-height: 520px) and (orientation: landscape) {
+      .name {
+        font-size: clamp(18px, 4vw, 30px);
+      }
+
+      .art-heading {
+        top: 12px;
+      }
+
+      .art-divider {
+        top: 21svh;
+      }
+
+      .art-stage {
+        inset: 21svh 0 0;
+        height: auto;
+        grid-template-columns: 40vw 60vw;
+        grid-template-rows: 1fr;
+      }
+
+      .art-film-panel::after {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: auto;
+        width: 1px;
+        height: auto;
+      }
+
+      .art-film-frame,
+      .art-film-caption {
+        width: 34vw;
+      }
+
+      .art-film-frame {
+        height: 58svh;
+      }
+
+      .art-slide-frame {
+        width: min(28vw, 220px);
+        max-height: 65svh;
+      }
+
+      .experience-copy {
+        top: 50%;
+        left: 5vw;
+        right: auto;
+        width: 40vw;
+        transform: translateY(-50%);
+      }
+
+      .experience-list li {
+        padding: 5px 0;
+      }
+
+      .experience-list strong {
+        font-size: clamp(17px, 3.6vw, 26px);
+      }
+
+      .film-window {
+        top: 0;
+        bottom: 0;
+        left: auto;
+        right: 0;
+        width: 53vw;
+        height: auto;
+        min-height: 100svh;
+      }
+
+      .skills-portrait {
+        width: 43vw;
+        height: 100svh;
+      }
+
+      .skills-copy {
+        top: 50%;
+        left: 5vw;
+        width: 48vw;
+        transform: translateY(-50%);
+      }
+
+      .skills-list li {
+        padding: 4px 0;
+        font-size: 9px;
+      }
+
+      .skills-contact {
+        margin-top: 8px;
+      }
+    }
+
+    /* Touch editions: keep media edges crisp and remove decorative gallery veils. */
+    @media (max-width: 1180px) {
+      .film-window {
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+
+      .film-window::before,
+      .film-window::after,
+      .gallery-work::after,
+      .gallery-v-slot::after {
+        display: none;
+      }
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      .art-carousel,
+      .gallery-vertical-carousel {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .film-frame img,
+      .film-frame video {
+        transition-duration: .55s;
+      }
+
+      .social-button:active {
+        transform: scale(1.12);
+      }
+
+      .gallery-work:active img,
+      .gallery-v-slot:active img {
+        filter: grayscale(0) sepia(.02) saturate(.82) contrast(.98) brightness(.91);
+      }
+    }
+
+    /*
+      Mobile/tablet performance edition. The class is added only on a real
+      touch device up to 1180px, so the laptop composition stays untouched.
+      Still images arrive already rendered in their editorial monochrome;
+      only a nearby colour layer is revealed on touch.
+    */
+    html.touch-optimized .film-frame,
+    html.touch-optimized .gallery-work,
+    html.touch-optimized .gallery-v-slot {
+      contain: layout paint;
+    }
+
+    html.touch-optimized .film-frame > img:not(.mobile-colour-layer),
+    html.touch-optimized .gallery-work > img:not(.mobile-colour-layer),
+    html.touch-optimized .gallery-v-slot > img:not(.mobile-colour-layer) {
+      filter: none !important;
+      transition: none !important;
+    }
+
+    /* ART keeps one stable colour bitmap; monochrome is now paint-only. */
+    html.touch-optimized .gallery-work > img:not(.mobile-colour-layer),
+    html.touch-optimized .gallery-v-slot > img:not(.mobile-colour-layer) {
+      filter: grayscale(1) sepia(.05) saturate(.34) contrast(.92) brightness(.78) !important;
+      transition: filter .34s ease !important;
+    }
+
+    html.touch-optimized .gallery-work.is-colour > img:not(.mobile-colour-layer),
+    html.touch-optimized .gallery-v-slot.is-colour > img:not(.mobile-colour-layer) {
+      filter: grayscale(0) sepia(.01) saturate(.9) contrast(.98) brightness(.94) !important;
+    }
+
+    html.touch-optimized .mobile-colour-layer {
+      position: absolute !important;
+      inset: 0;
+      z-index: 1;
+      width: 100% !important;
+      height: 100% !important;
+      opacity: 0;
+      filter: none !important;
+      pointer-events: none;
+      transition: opacity .46s cubic-bezier(.22,1,.36,1) !important;
+    }
+
+    html.touch-optimized .film-frame .mobile-colour-layer {
+      object-fit: cover;
+    }
+
+    html.touch-optimized .gallery-work .mobile-colour-layer,
+    html.touch-optimized .gallery-v-slot .mobile-colour-layer {
+      object-fit: contain;
+    }
+
+    html.touch-optimized .film-frame.is-colour .mobile-colour-layer,
+    html.touch-optimized .gallery-work.is-colour .mobile-colour-layer,
+    html.touch-optimized .gallery-v-slot.is-colour .mobile-colour-layer {
+      opacity: 1;
+    }
+
+    html.touch-optimized .film-frame.natural > img:not(.mobile-colour-layer) {
+      filter: none !important;
+    }
+
+    html.touch-optimized .film-frame video {
+      transition-duration: .42s;
+    }
+
+    html.touch-optimized .film-frame.is-colour video {
+      filter: grayscale(0) contrast(1) brightness(1) sepia(0) saturate(1);
+    }
+
+    html.touch-optimized .work-gallery-grain {
+      display: none;
+    }
+
+    html.touch-optimized.page-backgrounded .film-column {
+      animation-play-state: paused !important;
+    }
+
+    body.native-zoom-active .art-carousel-track,
+    body.native-zoom-active .gallery-v-slots,
+    body.native-zoom-active .work-gallery-rail {
+      transition: none !important;
+      will-change: auto;
+    }
+
+    /*
+      Touch composition fixes. These selectors only exist on actual touch
+      screens (or the local ?touch-preview QA mode), so the desktop edition
+      remains the untouched reference.
+    */
+    @media (max-width: 1180px) {
+      html.touch-optimized .art-film-frame {
+        height: auto;
+        aspect-ratio: 745 / 1054;
+      }
+
+      html.touch-optimized .art-film-image {
+        object-fit: contain;
+        object-position: center top;
+      }
+
+      html.touch-optimized .gallery-v-slot > img:not(.mobile-colour-layer) {
+        width: auto !important;
+        height: auto !important;
+        max-width: min(92vw, 980px) !important;
+        max-height: 64svh !important;
+        object-fit: contain !important;
+      }
+
+      /* Keep every ART work inside its own measured step on touch screens. */
+      html.touch-optimized .gallery-v-slot {
+        flex: 0 0 70svh;
+        height: 70svh;
+      }
+
+      html.touch-optimized .skills-portrait img {
+        object-fit: contain;
+        object-position: center top;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 800px) and (orientation: portrait) {
+      html.touch-optimized .art-film-frame,
+      html.touch-optimized .art-film-caption {
+        width: min(100vw, calc((85vh - 42px) * .70683));
+        width: min(100vw, calc((85svh - 42px) * .70683));
+      }
+
+      html.touch-optimized .art-film-frame {
+        height: min(calc(85vh - 42px), 141.48vw);
+        height: min(calc(85svh - 42px), 141.48vw);
+        aspect-ratio: auto;
+      }
+
+      html.touch-optimized .art-slide {
+        flex-basis: 62%;
+      }
+
+      html.touch-optimized .art-slide-frame {
+        width: min(56vw, 430px);
+      }
+
+      html.touch-optimized .skills-portrait {
+        left: 0;
+        right: 0;
+        width: min(100vw, 67.08vh);
+        width: min(100vw, 67.08svh);
+        height: min(100vh, 149.08vw);
+        height: min(100svh, 149.08vw);
+        margin-inline: auto;
+        background: var(--paper);
+      }
+
+      html.touch-optimized .skills-copy {
+        top: min(105vh, 154vw);
+        top: min(105svh, 154vw);
+      }
+
+      html.touch-optimized .film-window {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: auto;
+      }
+    }
+
+    @media (min-width: 801px) and (max-width: 1180px) and (orientation: portrait) {
+      html.touch-optimized .art-divider {
+        top: 15svh;
+      }
+
+      html.touch-optimized .art-stage {
+        inset: 15svh 0 auto;
+        height: 170svh;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 85svh 85svh;
+      }
+
+      html.touch-optimized .art-film-panel {
+        padding: 0;
+        grid-template-rows: minmax(0, 1fr) auto;
+      }
+
+      html.touch-optimized .art-film-panel::after {
+        top: auto;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: auto;
+        height: 1px;
+      }
+
+      html.touch-optimized .art-film-frame,
+      html.touch-optimized .art-film-caption {
+        width: min(100vw, calc((85svh - 42px) * .70683));
+        max-width: none;
+      }
+
+      html.touch-optimized .art-film-frame {
+        height: min(calc(85svh - 42px), 141.48vw);
+        aspect-ratio: auto;
+        box-shadow: none;
+      }
+
+      html.touch-optimized .art-film-caption {
+        min-height: 38px;
+        margin: 0;
+        padding: 13px 5vw 0;
+      }
+
+      html.touch-optimized .art-slide {
+        flex-basis: 62%;
+        padding: 5svh 0 8svh;
+      }
+
+      html.touch-optimized .art-slide-frame {
+        width: min(56vw, 520px);
+        max-height: 68svh;
+      }
+
+      html.touch-optimized .experience-copy {
+        top: max(4.5svh, calc(env(safe-area-inset-top) + 12px));
+        left: 7vw;
+        right: 7vw;
+        width: auto;
+        transform: none;
+      }
+
+      html.touch-optimized .film-window {
+        top: 43svh;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: auto;
+        height: auto;
+        min-height: 57svh;
+      }
+
+      html.touch-optimized .film-frame,
+      html.touch-optimized .film-column .film-frame,
+      html.touch-optimized .film-column:nth-child(2) .film-frame {
+        height: 28svh !important;
+      }
+
+      html.touch-optimized .film-frame.focus-bottom {
+        height: 38svh !important;
+      }
+
+      html.touch-optimized .skills-portrait {
+        left: 0;
+        right: 0;
+        width: min(100vw, 67.08svh);
+        height: min(100svh, 149.08vw);
+        margin-inline: auto;
+        background: var(--paper);
+      }
+
+      html.touch-optimized .skills-copy {
+        top: min(105svh, 154vw);
+        left: 7vw;
+        width: 86vw;
+        transform: none;
+      }
+    }
+
+    /* Tablet portrait: fill the screen, preserve the head, crop only at the foot. */
+    @media (min-width: 801px) and (max-width: 1400px) and (orientation: portrait) {
+      html.touch-optimized .skills-portrait {
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 100svh;
+        margin: 0;
+        background: var(--paper);
+        box-shadow: none;
+      }
+
+      html.touch-optimized .skills-portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        transform: none;
+      }
+
+      html.touch-optimized .skills-copy {
+        top: calc(100svh + clamp(54px, 8svh, 86px));
+      }
+    }
+
+    /* Tablet landscape: exact half-page portrait, with no dark strip below it. */
+    @media (min-width: 801px) and (max-width: 1400px) and (orientation: landscape) {
+      html.touch-optimized .skills-portrait {
+        top: 0;
+        right: 0;
+        left: auto;
+        width: 50vw;
+        height: calc(100svh + 4px);
+        margin: 0;
+        background: var(--paper);
+        box-shadow: none;
+      }
+
+      html.touch-optimized .skills-portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        transform: none;
+      }
+
+      html.touch-optimized .skills-copy {
+        top: 50%;
+        left: 5vw;
+        width: 43vw;
+        transform: translateY(-50%);
+      }
+    }
+
+    /* The same non-overlapping ART rhythm also covers wider touch tablets. */
+    @media (min-width: 1181px) and (max-width: 1400px) {
+      html.touch-optimized .gallery-v-slot {
+        flex: 0 0 70svh;
+        height: 70svh;
+      }
+
+      html.touch-optimized .gallery-v-slot > img:not(.mobile-colour-layer) {
+        width: auto !important;
+        height: auto !important;
+        max-width: min(86vw, 980px) !important;
+        max-height: 64svh !important;
+        object-fit: contain !important;
+      }
+    }
+
+    /*
+      Final touch fit pass. Keep the desktop composition untouched while
+      making the portrait and fashion study predictable on every phone and
+      small tablet ratio.
+    */
+    @media (max-width: 800px) and (orientation: portrait) {
+      html.touch-optimized .skills-portrait {
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 100svh;
+        margin: 0;
+        background: var(--paper);
+        box-shadow: none;
+      }
+
+      html.touch-optimized .skills-portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        transform: none;
+      }
+
+      html.touch-optimized .skills-copy {
+        top: calc(100svh + clamp(40px, 6svh, 64px));
+      }
+    }
+
+    @media (max-width: 1400px) and (max-height: 620px) and (orientation: landscape) {
+      html.touch-optimized .skills-portrait {
+        top: 0;
+        right: 0;
+        left: auto;
+        width: 50vw;
+        height: calc(100svh + 2px);
+        margin: 0;
+        background: var(--paper);
+        box-shadow: none;
+      }
+
+      html.touch-optimized .skills-portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 38%;
+        transform: none;
+      }
+
+      html.touch-optimized .skills-copy {
+        top: 50%;
+        left: 5vw;
+        width: 43vw;
+        transform: translateY(-50%);
+      }
+
+      html.touch-optimized .skills-contact {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 6px;
+      }
+
+      html.touch-optimized .skills-contact-copy {
+        min-width: 0;
+      }
+
+      html.touch-optimized .skills-email {
+        max-width: none;
+        white-space: nowrap;
+        overflow-wrap: normal;
+        word-break: normal;
+        font-size: clamp(6px, 1.12vw, 8px);
+        letter-spacing: .015em;
+      }
+
+      html.touch-optimized .skills-socials {
+        gap: 0;
+      }
+
+      html.touch-optimized .social-button {
+        width: 28px;
+        height: 28px;
+      }
+
+      html.touch-optimized .social-button svg {
+        width: 17px;
+        height: 17px;
+      }
+    }
+
+    @media (max-width: 1000px) and (max-height: 520px) and (orientation: landscape) {
+      html.touch-optimized .art-stage {
+        grid-template-columns: 42vw 58vw;
+      }
+
+      html.touch-optimized .art-carousel {
+        isolation: isolate;
+      }
+
+      html.touch-optimized .art-carousel::before,
+      html.touch-optimized .art-carousel::after {
+        content: "";
+        position: absolute;
+        top: 7%;
+        bottom: 7%;
+        width: clamp(14px, 2.8vw, 25px);
+        z-index: 7;
+        pointer-events: none;
+        opacity: .72;
+      }
+
+      html.touch-optimized .art-carousel::before {
+        left: 0;
+        background: linear-gradient(90deg, rgba(7, 5, 6, .82), transparent);
+      }
+
+      html.touch-optimized .art-carousel::after {
+        right: 0;
+        background: linear-gradient(270deg, rgba(7, 5, 6, .82), transparent);
+      }
+
+      html.touch-optimized .art-film-panel {
+        padding: clamp(8px, 2.5svh, 12px);
+      }
+
+      html.touch-optimized .art-film-frame,
+      html.touch-optimized .art-film-caption {
+        width: 100%;
+      }
+
+      html.touch-optimized .art-film-frame {
+        height: calc(79svh - 60px);
+        aspect-ratio: auto;
+      }
+
+      html.touch-optimized .art-film-image {
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      html.touch-optimized .art-film-caption {
+        min-height: 28px;
+        margin-top: 8px;
+      }
+
+      html.touch-optimized .art-slide {
+        flex: 0 0 62%;
+        padding-inline: 0;
+      }
+
+      html.touch-optimized .art-slide-frame {
+        width: min(27vw, 190px);
+        box-shadow: 0 18px 42px rgba(0, 0, 0, .34);
+      }
+
+      html.touch-optimized .art-scene.is-copy-visible .art-slide.is-neighbour .art-slide-frame {
+        opacity: .52;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .art-heading,
+      .art-divider,
+      .art-film-frame,
+      .art-film-image,
+      .art-film-caption,
+      .art-slide-frame,
+      .art-carousel-meta {
+        transition-duration: .01ms !important;
+        transition-delay: 0s !important;
+      }
+
+      .art-film-frame::before {
+        animation: none !important;
+      }
+
+      .gallery-work img,
+      .gallery-v-slot img,
+      .gallery-v-slots,
+      .skills-portrait img {
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page" id="page">
+    <div class="paper-noise"></div>
+    <canvas id="waterCanvas"></canvas>
+    <canvas id="cursorMist" aria-hidden="true"></canvas>
+
+    <section class="hero" id="hero">
+      <div class="title-wrap">
+        <h1 class="name">MA<span class="glint">R</span>IA PARA<span class="glint glint--late">K</span>HINA</h1>
+        <div class="line"></div>
+        <div class="subtitle">Fashion · Art · Visual Stories</div>
+      </div>
+    </section>
+
+    <section class="art-scene" id="artScene" aria-label="Fashion study">
+      <div class="art-wave" aria-hidden="true"></div>
+
+      <header class="art-heading">
+        <div>
+          <p class="art-kicker">Art · selected sketches</p>
+          <h2 class="art-title">Fashion Study</h2>
+        </div>
+        <p class="art-heading-note">Silhouette · proportion · movement</p>
+      </header>
+
+      <div class="art-divider" aria-hidden="true"></div>
+
+      <div class="art-stage">
+        <figure class="art-film-panel">
+          <div class="art-film-frame">
+            <video
+              id="artProcessVideo"
+              class="art-film-image"
+              muted
+              playsinline
+              webkit-playsinline
+              preload="none"
+              data-desktop-src="assets/art/fashion-study-process.mov"
+              poster="assets/art/art-film-frame.jpg"
+              aria-label="Fashion silhouette drawing process"
+              disablepictureinpicture
+            ></video>
+          </div>
+          <figcaption class="art-film-caption">
+            <span>Form in motion</span>
+            <span>Study 01</span>
+          </figcaption>
+        </figure>
+
+        <div
+          class="art-carousel"
+          id="artCarousel"
+          role="region"
+          tabindex="0"
+          aria-label="Fashion sketches. Drag left or right to explore."
+        >
+          <div class="art-carousel-track"></div>
+          <div class="art-carousel-meta">
+            <span>Drag to explore</span>
+            <span class="art-counter" aria-live="polite">01 / 05</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="portfolio" id="portfolio" aria-label="Experience and selected work">
+      <div class="experience-copy">
+        <p class="experience-kicker">Interior textiles · selected experience</p>
+        <ul class="experience-list">
+          <li><strong>9+ years</strong><span>of experience in interior textiles</span></li>
+          <li><strong>700+</strong><span>projects delivered</span></li>
+          <li><span>Collaborations with</span><strong>premium studios</strong><span>and developers</span></li>
+          <li><span>Project budgets of</span><strong>£200K+</strong></li>
+        </ul>
+      </div>
+
+      <div class="film-window" aria-label="Selected projects. Hover to reveal colour.">
+        <div class="film-track">
+          <div class="film-frame natural focus-bottom"><img data-desktop-src="assets/portfolio/optimized/edit-interior-neutral.jpg" alt="Neutral interior with full-height bespoke curtains" /></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/detail-04.jpg" alt="Detailed curtain drapery and tassel" /></div>
+          <div class="film-frame"><video data-desktop-src="assets/portfolio/project-motion-01-web.mp4" poster="assets/portfolio/optimized/project-motion-01-poster.png" muted loop playsinline webkit-playsinline preload="none"></video></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/edit-blue-headboard.jpg" alt="Bespoke blue bedroom textiles" /></div>
+          <div class="film-frame natural"><img data-desktop-src="assets/portfolio/optimized/interior-08.jpg" alt="Neutral bedroom textile styling" /></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/detail-02.jpg" alt="Curtain styling with velvet chair" /></div>
+          <div class="film-frame stabilized-motion"><video data-desktop-src="assets/portfolio/project-motion-02-stabilized.mp4" poster="assets/portfolio/optimized/project-motion-02-poster.png" muted loop playsinline webkit-playsinline preload="none"></video></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/edit-orange-bedroom.jpg" alt="Colourful bespoke bedroom textiles" /></div>
+          <div class="film-frame natural"><img data-desktop-src="assets/portfolio/optimized/interior-05.jpg" alt="Dining room curtain installation" /></div>
+          <div class="film-frame crop-process"><img data-desktop-src="assets/portfolio/optimized/process-01.jpg" alt="Maria documenting a completed textile project" /></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/edit-colour-samples.jpg" alt="Colourful premium textile selection" /></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/edit-dining-room.jpg" alt="Patterned dining room curtains" /></div>
+          <div class="film-frame natural"><img data-desktop-src="assets/portfolio/optimized/edit-blue-bedroom-corner.jpg" alt="Neutral layered bedroom curtains" /></div>
+          <div class="film-frame natural"><img data-desktop-src="assets/portfolio/optimized/new-04.jpg" alt="Ceiling-mounted neutral curtains" /></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/edit-gold-bedroom.jpg" alt="Bespoke gold bedroom curtains and textiles" /></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/edit-kitchen-roman.jpg" alt="Bespoke Roman blind and dining textiles" /></div>
+          <div class="film-frame natural"><img data-desktop-src="assets/portfolio/optimized/edit-blue-bedroom-wide.jpg" alt="Completed bedroom textile installation" /></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/detail-03.jpg" alt="Layered sheer and velvet curtains" /></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/edit-blue-cushions.jpg" alt="Bespoke blue textile cushions" /></div>
+          <div class="film-frame natural"><img data-desktop-src="assets/portfolio/optimized/edit-dining-curtains.jpg" alt="Bespoke dining room curtain detail" /></div>
+          <div class="film-frame"><video data-desktop-src="assets/portfolio/project-motion-03-web.mp4" poster="assets/portfolio/optimized/project-motion-03-poster.png" muted loop playsinline webkit-playsinline preload="none"></video></div>
+          <div class="film-frame natural"><img data-desktop-src="assets/portfolio/optimized/edit-living-room-curtains.jpg" alt="Neutral living room curtain installation" /></div>
+          <div class="film-frame natural"><img data-desktop-src="assets/portfolio/optimized/edit-neutral-samples.jpg" alt="Neutral premium textile and finish selection" /></div>
+          <div class="film-frame"><img data-desktop-src="assets/portfolio/optimized/edit-warm-samples.jpg" alt="Warm textile and material palette" /></div>
+          <div class="film-frame natural"><img data-desktop-src="assets/portfolio/optimized/edit-london-living-room.jpg" alt="Soft neutral curtains in a London living room" /></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gallery-gateway" id="galleryGateway" aria-label="Entrance to the art gallery">
+      <div class="gateway-dark-wipe" id="gatewayDarkWipe" aria-hidden="true"></div>
+      <div class="gateway-art-word" id="gatewayArtWord" aria-hidden="true">ART</div>
+      <figure class="gateway-macro" id="gatewayMacro">
+        <img
+          src="assets/gallery/art-01-macro.jpg"
+          alt="Macro detail of an original painting"
+          decoding="async"
+        />
+        <figcaption>Painting detail · 01</figcaption>
+      </figure>
+    </section>
+
+    <section class="work-gallery" id="workGallery" aria-label="Selected art series">
+      <div class="work-gallery-grain" aria-hidden="true"></div>
+      <div class="work-gallery-rail" id="workGalleryRail">
+        <article class="gallery-series gallery-series--cosmologies" aria-labelledby="seriesCosmologies">
+          <header class="gallery-series-caption">
+            <span>01 / 05</span>
+            <h2 id="seriesCosmologies">Private<br />Cosmologies</h2>
+            <p>Symbol · gaze · inner worlds</p>
+          </header>
+          <figure class="gallery-work work-02" tabindex="0">
+            <img src="assets/gallery/art-02-halo.jpg" alt="Portrait with a gold halo" loading="lazy" decoding="async" />
+            <figcaption>Work 02</figcaption>
+          </figure>
+          <figure class="gallery-work work-03" tabindex="0">
+            <img src="assets/gallery/art-03-eye-city.jpg" alt="A large blue eye suspended over a dark city" loading="lazy" decoding="async" />
+            <figcaption>Work 03</figcaption>
+          </figure>
+          <figure class="gallery-work work-04" tabindex="0">
+            <img src="assets/gallery/art-04-spiral-figure.jpg" alt="Expressive figure surrounded by spiral lines" loading="lazy" decoding="async" />
+            <figcaption>Work 04</figcaption>
+          </figure>
+        </article>
+
+        <article class="gallery-series gallery-series--body" aria-labelledby="seriesBody">
+          <header class="gallery-series-caption">
+            <span>02 / 05</span>
+            <h2 id="seriesBody">Kristina / 2017</h2>
+            <p>Figure · gesture · performance</p>
+          </header>
+          <figure class="gallery-work work-05" tabindex="0">
+            <img src="assets/gallery/art-05-figure-studies.jpg" alt="Black and white studies of figures and faces" loading="lazy" decoding="async" />
+            <figcaption>Work 05</figcaption>
+          </figure>
+          <figure class="gallery-work work-06" tabindex="0">
+            <img src="assets/gallery/art-06-performance.jpg" alt="Performance portrait with a sculptural headpiece" loading="lazy" decoding="async" />
+            <figcaption>Work 06</figcaption>
+          </figure>
+        </article>
+
+        <article class="gallery-series gallery-series--stillness" aria-labelledby="seriesStillness">
+          <header class="gallery-series-caption">
+            <span>03 / 05</span>
+            <h2 id="seriesStillness">Studies in<br />Stillness</h2>
+            <p>Presence · line · sensation</p>
+          </header>
+          <figure class="gallery-work work-07" tabindex="0">
+            <img src="assets/gallery/art-07-profile.jpg" alt="Soft atmospheric profile drawing" loading="lazy" decoding="async" />
+            <figcaption>Work 07</figcaption>
+          </figure>
+          <figure class="gallery-work work-08" tabindex="0">
+            <img src="assets/gallery/art-08-portrait.jpg" alt="Soft atmospheric portrait drawing" loading="lazy" decoding="async" />
+            <figcaption>Work 08</figcaption>
+          </figure>
+        </article>
+
+        <article class="gallery-series gallery-series--elsewhere" aria-labelledby="seriesElsewhere">
+          <header class="gallery-series-caption">
+            <span>04 / 05</span>
+            <h2 id="seriesElsewhere">Architectures<br />of Elsewhere</h2>
+            <p>Journey · memory · imagined place</p>
+          </header>
+          <figure class="gallery-work work-09" tabindex="0">
+            <img src="assets/gallery/art-09-castle.jpg" alt="Charcoal drawing of The Castle" loading="lazy" decoding="async" />
+            <figcaption>Work 09</figcaption>
+          </figure>
+          <figure class="gallery-work work-10" tabindex="0">
+            <img src="assets/gallery/art-10-night-dialogue.jpg" alt="Two figures in a surreal night-time interior" loading="lazy" decoding="async" />
+            <figcaption>Work 10</figcaption>
+          </figure>
+        </article>
+
+        <article class="gallery-series gallery-series--observations" aria-labelledby="seriesObservations">
+          <header class="gallery-series-caption">
+            <span>05 / 05</span>
+            <h2 id="seriesObservations">Chromatic<br />Observations</h2>
+            <p>Drag vertically to move through the series</p>
+          </header>
+
+          <div
+            class="gallery-vertical-carousel"
+            id="galleryVerticalCarousel"
+            role="region"
+            tabindex="0"
+            aria-label="Five artworks. Drag up or down to explore."
+          >
+            <div class="gallery-v-slots"></div>
+            <div class="gallery-v-meta">
+              <span>Drag vertically</span>
+              <span id="galleryVerticalCounter" aria-live="polite">01 / 05</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="gallery-progress" aria-hidden="true">
+        <span id="galleryProgressBar"></span>
+      </div>
+    </section>
+
+    <section class="skills-scene" id="skillsScene" aria-label="Practice, skills and contact">
+      <div class="skills-copy" id="skillsCopy">
+        <p class="skills-kicker">Practice / Skills</p>
+        <ul class="skills-list">
+          <li>Conceptual thinking</li>
+          <li>Visual storytelling</li>
+          <li>Colour and composition</li>
+          <li>Fashion and art research</li>
+          <li>Drawing, painting and digital experimentation</li>
+          <li>AI-assisted web design and creative development</li>
+        </ul>
+
+        <footer class="skills-contact">
+          <div class="skills-contact-copy">
+            <span class="skills-contact-label">Available for collaborations</span>
+            <a class="skills-email" href="mailto:mariaparakhina.studio@gmail.com">mariaparakhina.studio@gmail.com</a>
+          </div>
+
+          <nav class="skills-socials" aria-label="Social media">
+            <a class="social-button" href="https://www.instagram.com/parakhina.textile?igsh=Y2g3dGRkNGNvbjU3&amp;utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.7"/><circle cx="17.4" cy="6.8" r=".7" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a class="social-button" href="https://t.me/mariaparakhina" target="_blank" rel="noopener noreferrer" aria-label="Telegram" title="Telegram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11.5 20.3 4.2l-3.1 15.6-5.4-4.3-3.1 2.9.6-5.3 7.7-6.2-9.6 5.2-3.9-.6Z"/></svg>
+            </a>
+            <a class="social-button" href="https://wa.me/qr/B24ADLNHOFXCC1" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.1 18.8 3.8 21l2.4-.8A8.5 8.5 0 1 0 3.5 14a8.4 8.4 0 0 0 1.6 4.8Z"/><path transform="translate(0 1.8)" d="M8.2 7.2c.4 4.6 4 8.2 8.6 8.6l1.1-2.1-2.8-1.3-1.1 1.2a9 9 0 0 1-3.6-3.6l1.2-1.1-1.3-2.8-2.1 1.1Z"/></svg>
+            </a>
+          </nav>
+        </footer>
+      </div>
+
+      <figure class="skills-portrait" id="skillsPortrait">
+        <img src="assets/gallery/artist-portrait-retouched.jpg" alt="Portrait of Maria Parakhina" loading="lazy" decoding="async" />
+        <figcaption>Maria Parakhina · Visual practice</figcaption>
+      </figure>
+    </section>
+
+    <div class="cycle-curtain" id="cycleCurtain" aria-hidden="true"></div>
+    <div class="hint" id="hint">touch the paper</div>
+    <div class="explore-hint">scroll to explore</div>
+  </div>
+
+  <script>
+    const touchPreview = new URLSearchParams(window.location.search).has('touch-preview');
+    const touchOptimized =
+      (navigator.maxTouchPoints > 0 || touchPreview) &&
+      window.matchMedia('(max-width: 1400px)').matches;
+    if (touchOptimized) document.documentElement.classList.add('touch-optimized');
+
+    const fileStem = source => {
+      const cleanSource = source.split('?')[0];
+      const fileName = cleanSource.slice(cleanSource.lastIndexOf('/') + 1);
+      return fileName.replace(/\.[^.]+$/, '');
+    };
+    const mobilePortfolioImage = (source, variant) =>
+      `assets/mobile/portfolio/${fileStem(source)}-${variant}.jpg`;
+    const mobileGalleryImage = (source, variant) =>
+      `assets/mobile/gallery/${fileStem(source)}-${variant}.jpg`;
+    const mobileArtImage = source =>
+      `assets/mobile/art/${fileStem(source)}.jpg`;
+
+    function addTouchColourLayer(container, source, mapper) {
+      if (!touchOptimized || container.classList.contains('natural')) return null;
+      const layer = document.createElement('img');
+      layer.className = 'mobile-colour-layer';
+      layer.alt = '';
+      layer.setAttribute('aria-hidden', 'true');
+      layer.decoding = 'async';
+      layer.loading = 'lazy';
+      layer.dataset.src = mapper(source, 'color');
+      layer.draggable = false;
+      container.append(layer);
+      return layer;
+    }
+
+    function loadTouchColourLayer(container) {
+      const layer = container.querySelector('.mobile-colour-layer');
+      if (!layer || layer.src || !layer.dataset.src) return;
+      layer.src = layer.dataset.src;
+    }
+
+    function prepareTouchGalleryImage(image, source) {
+      if (!touchOptimized) return;
+      image.dataset.colourSrc = mobileGalleryImage(source, 'color');
+      image.src = image.dataset.colourSrc;
+    }
+
+    function toggleGalleryColour(container) {
+      container.classList.toggle('is-colour');
+    }
+
+    const canvas = document.getElementById('waterCanvas');
+    const ctx = canvas.getContext('2d');
+    const page = document.getElementById('page');
+    const hero = document.getElementById('hero');
+    const artScene = document.getElementById('artScene');
+    const artStage = artScene.querySelector('.art-stage');
+    const artProcessVideo = document.getElementById('artProcessVideo');
+    const artCarousel = document.getElementById('artCarousel');
+    const artCarouselTrack = artCarousel.querySelector('.art-carousel-track');
+    const artCounter = artCarousel.querySelector('.art-counter');
+    const portfolio = document.getElementById('portfolio');
+    const galleryGateway = document.getElementById('galleryGateway');
+    const gatewayDarkWipe = document.getElementById('gatewayDarkWipe');
+    const gatewayArtWord = document.getElementById('gatewayArtWord');
+    const gatewayMacro = document.getElementById('gatewayMacro');
+    const workGallery = document.getElementById('workGallery');
+    const workGalleryRail = document.getElementById('workGalleryRail');
+    const galleryProgressBar = document.getElementById('galleryProgressBar');
+    const galleryVerticalCarousel = document.getElementById('galleryVerticalCarousel');
+    const galleryVerticalCounter = document.getElementById('galleryVerticalCounter');
+    const skillsScene = document.getElementById('skillsScene');
+    const skillsCopy = document.getElementById('skillsCopy');
+    const skillsPortrait = document.getElementById('skillsPortrait');
+    const cycleCurtain = document.getElementById('cycleCurtain');
+    const waterCanvas = document.getElementById('waterCanvas');
+    const cursorMistCanvas = document.getElementById('cursorMist');
+    const cursorMistCtx = cursorMistCanvas.getContext('2d');
+    let nativeZoomActive = false;
+    let nativeZoomAnchorY = 0;
+    let nativeZoomReleaseTimer = 0;
+    const filmTrack = document.querySelector('.film-track');
+    const originalFrames = [...filmTrack.children];
+    const filmColumns = [document.createElement('div'), document.createElement('div')];
+
+    if (touchOptimized) {
+      artProcessVideo.dataset.desktopSrc = artProcessVideo.getAttribute('data-desktop-src');
+      artProcessVideo.dataset.mobileSrc = 'assets/mobile/video/fashion-study-process.m4v';
+      artProcessVideo.removeAttribute('src');
+      artProcessVideo.preload = 'none';
+
+      originalFrames.forEach(frame => {
+        const image = frame.querySelector('img');
+        const video = frame.querySelector('video');
+        if (image) {
+          const desktopSource = image.getAttribute('data-desktop-src');
+          image.dataset.desktopSrc = desktopSource;
+          image.loading = 'lazy';
+          image.decoding = 'async';
+          image.src = mobilePortfolioImage(
+            desktopSource,
+            frame.classList.contains('natural') ? 'color' : 'bw'
+          );
+          addTouchColourLayer(frame, desktopSource, mobilePortfolioImage);
+        }
+        if (video) {
+          const desktopSource = video.getAttribute('data-desktop-src');
+          video.dataset.desktopSrc = desktopSource;
+          video.dataset.mobileSrc = desktopSource.includes('motion-01')
+            ? 'assets/mobile/video/project-motion-01.m4v'
+            : desktopSource.includes('motion-02')
+              ? 'assets/mobile/video/project-motion-02.m4v'
+              : 'assets/mobile/video/project-motion-03.m4v';
+          video.removeAttribute('src');
+          video.preload = 'none';
+        }
+      });
+    } else {
+      artProcessVideo.src = artProcessVideo.getAttribute('data-desktop-src');
+      artProcessVideo.preload = 'auto';
+      originalFrames.forEach(frame => {
+        const image = frame.querySelector('img');
+        const video = frame.querySelector('video');
+        if (image) image.src = image.getAttribute('data-desktop-src');
+        if (video) {
+          video.src = video.getAttribute('data-desktop-src');
+          video.preload = 'auto';
+        }
+      });
+    }
+
+    filmColumns.forEach(column => column.className = 'film-column');
+    filmTrack.replaceChildren(...filmColumns);
+    const frameHeightPatterns = [
+      ['42vh', '57vh', '49vh', '63vh'],
+      ['56vh', '45vh', '61vh', '49vh']
+    ];
+    originalFrames.forEach((frame, index) => {
+      const columnIndex = index % 2;
+      const position = Math.floor(index / 2);
+      frame.style.height = frameHeightPatterns[columnIndex][position % 4];
+      filmColumns[columnIndex].append(frame);
+    });
+    filmColumns.forEach(column => {
+      [...column.children].forEach(frame => {
+        const clone = frame.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        column.append(clone);
+      });
+    });
+
+    const artLooks = [
+      {
+        src: 'assets/art/look-02-black-dress.jpg',
+        alt: 'Fashion sketch of a voluminous black evening silhouette'
+      },
+      {
+        src: 'assets/art/look-03-yellow-dress.jpg',
+        alt: 'Fashion sketch of a fitted yellow dress'
+      },
+      {
+        src: 'assets/art/look-04-blue-gown.jpg',
+        alt: 'Fashion sketch of a long powder-blue one-shoulder gown'
+      },
+      {
+        src: 'assets/art/look-01-cape.jpg',
+        alt: 'Fashion sketch of a sculptural brown cape'
+      },
+      {
+        src: 'assets/art/look-05-denim.jpg',
+        alt: 'Fashion sketch of a neutral top with blue denim'
+      }
+    ];
+
+    const extendedArtLooks = [
+      ...artLooks.slice(-2),
+      ...artLooks,
+      ...artLooks.slice(0, 2)
+    ];
+
+    extendedArtLooks.forEach(look => {
+      const slide = document.createElement('div');
+      const frame = document.createElement('div');
+      const image = document.createElement('img');
+      slide.className = 'art-slide';
+      frame.className = 'art-slide-frame';
+      image.src = touchOptimized ? mobileArtImage(look.src) : look.src;
+      image.alt = look.alt;
+      image.loading = 'eager';
+      image.decoding = 'async';
+      image.draggable = false;
+      frame.append(image);
+      slide.append(frame);
+      artCarouselTrack.append(slide);
+    });
+
+    const artSlides = [...artCarouselTrack.children];
+    let artCarouselIndex = 2;
+    let artCarouselAnimating = false;
+    let artDragging = false;
+    let artDragPointerId = null;
+    let artDragStartX = 0;
+    let artDragX = 0;
+    let artPendingDragX = 0;
+    let artDragFrame = 0;
+    let suppressArtClick = false;
+    let artHasAwakened = false;
+    let artCopyRevealed = false;
+    let artCopyFallbackTimer = 0;
+    let artCarouselStepPx = 1;
+    let artCarouselSettleTimer = 0;
+
+    function measureArtCarousel() {
+      artCarouselStepPx = Math.max(
+        1,
+        artSlides[0]?.getBoundingClientRect().width || artCarousel.clientWidth / 3
+      );
+    }
+
+    const artCarouselStep = () => artCarouselStepPx;
+    const artCarouselBaseX = () =>
+      (artCarousel.clientWidth - artCarouselStep()) / 2 -
+      artCarouselIndex * artCarouselStep();
+
+    function realArtIndex() {
+      return ((artCarouselIndex - 2) % artLooks.length + artLooks.length) % artLooks.length;
+    }
+
+    function updateArtCarouselClasses() {
+      artSlides.forEach((slide, index) => {
+        const isCenter = index === artCarouselIndex;
+        slide.classList.toggle('is-center', isCenter);
+        slide.classList.toggle('is-neighbour', Math.abs(index - artCarouselIndex) === 1);
+        slide.setAttribute('aria-hidden', isCenter ? 'false' : 'true');
+      });
+
+      artCounter.textContent = `${String(realArtIndex() + 1).padStart(2, '0')} / ${String(artLooks.length).padStart(2, '0')}`;
+    }
+
+    function positionArtCarousel(offset = 0, animated = false, updateTransition = true) {
+      if (updateTransition) {
+        artCarouselTrack.style.transition = animated
+          ? 'transform .66s cubic-bezier(.22,1,.36,1)'
+          : 'none';
+      }
+      artCarouselTrack.style.transform = `translate3d(${artCarouselBaseX() + offset}px,0,0)`;
+    }
+
+    function finishArtCarouselLoop() {
+      if (!artCarouselAnimating) return;
+      window.clearTimeout(artCarouselSettleTimer);
+      if (artCarouselIndex === 1) {
+        artCarouselIndex = artLooks.length + 1;
+      } else if (artCarouselIndex === artLooks.length + 2) {
+        artCarouselIndex = 2;
+      }
+
+      artCarouselAnimating = false;
+      updateArtCarouselClasses();
+      positionArtCarousel(0, false);
+    }
+
+    function moveArtCarousel(direction) {
+      if (artCarouselAnimating || artDragging) return;
+      artCarouselIndex += direction;
+      artCarouselAnimating = true;
+      updateArtCarouselClasses();
+      positionArtCarousel(0, true);
+      window.clearTimeout(artCarouselSettleTimer);
+      artCarouselSettleTimer = window.setTimeout(finishArtCarouselLoop, 760);
+    }
+
+    artCarouselTrack.addEventListener('transitionend', event => {
+      if (event.target === artCarouselTrack && event.propertyName === 'transform') {
+        finishArtCarouselLoop();
+      }
+    });
+
+    artCarousel.addEventListener('pointerdown', event => {
+      if (nativeZoomActive || artCarouselAnimating || !artScene.classList.contains('is-ready')) return;
+      artDragging = true;
+      artDragPointerId = event.pointerId;
+      artDragStartX = event.clientX;
+      artDragX = 0;
+      artPendingDragX = 0;
+      suppressArtClick = false;
+      artCarousel.classList.add('is-dragging');
+      artCarousel.setPointerCapture(event.pointerId);
+      positionArtCarousel(0, false);
+    });
+
+    artCarousel.addEventListener('pointermove', event => {
+      if (!artDragging || event.pointerId !== artDragPointerId) return;
+      artPendingDragX = clamp(
+        event.clientX - artDragStartX,
+        -artCarouselStep() * 1.02,
+        artCarouselStep() * 1.02
+      );
+
+      if (!artDragFrame) {
+        artDragFrame = requestAnimationFrame(() => {
+          artDragX = artPendingDragX;
+          suppressArtClick = Math.abs(artDragX) > 8;
+          positionArtCarousel(artDragX, false, false);
+          artDragFrame = 0;
+        });
+      }
+    });
+
+    function releaseArtCarousel(event) {
+      if (!artDragging || event.pointerId !== artDragPointerId) return;
+      artDragging = false;
+      artCarousel.classList.remove('is-dragging');
+
+      if (artDragFrame) {
+        cancelAnimationFrame(artDragFrame);
+        artDragFrame = 0;
+      }
+      artDragX = clamp(
+        event.clientX - artDragStartX,
+        -artCarouselStep() * 1.02,
+        artCarouselStep() * 1.02
+      );
+      positionArtCarousel(artDragX, false, false);
+
+      if (artCarousel.hasPointerCapture(event.pointerId)) {
+        artCarousel.releasePointerCapture(event.pointerId);
+      }
+
+      const threshold = Math.min(90, artCarouselStep() * .22);
+      if (Math.abs(artDragX) > threshold) {
+        artCarouselIndex += artDragX < 0 ? 1 : -1;
+        updateArtCarouselClasses();
+      }
+
+      artCarouselAnimating = true;
+      void artCarouselTrack.offsetWidth;
+      requestAnimationFrame(() => {
+        positionArtCarousel(0, true);
+      });
+      window.clearTimeout(artCarouselSettleTimer);
+      artCarouselSettleTimer = window.setTimeout(finishArtCarouselLoop, 760);
+
+      artDragPointerId = null;
+      artDragX = 0;
+      artPendingDragX = 0;
+      window.setTimeout(() => {
+        suppressArtClick = false;
+      }, 80);
+    }
+
+    artCarousel.addEventListener('pointerup', releaseArtCarousel);
+    artCarousel.addEventListener('pointercancel', releaseArtCarousel);
+
+    artCarousel.addEventListener('click', event => {
+      if (suppressArtClick) return;
+      const slide = event.target.closest('.art-slide');
+      if (!slide) return;
+      const clickedIndex = artSlides.indexOf(slide);
+      if (clickedIndex < artCarouselIndex) moveArtCarousel(-1);
+      if (clickedIndex > artCarouselIndex) moveArtCarousel(1);
+    });
+
+    artCarousel.addEventListener('keydown', event => {
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        moveArtCarousel(1);
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        moveArtCarousel(-1);
+      }
+    });
+
+    measureArtCarousel();
+    updateArtCarouselClasses();
+    positionArtCarousel();
+    window.addEventListener('resize', () => {
+      if (nativeZoomActive) return;
+      measureArtCarousel();
+      positionArtCarousel(0, false);
+    });
+
+    function revealArtCopy() {
+      if (artCopyRevealed) return;
+      artCopyRevealed = true;
+      window.clearTimeout(artCopyFallbackTimer);
+      artScene.classList.add('is-copy-visible');
+      window.setTimeout(() => artScene.classList.add('is-ready'), 1350);
+    }
+
+    function startArtSequence() {
+      artHasAwakened = true;
+      artScene.classList.add('is-awake');
+      revealArtCopy();
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+      }
+
+      if (touchOptimized && !artProcessVideo.getAttribute('src')) {
+        artProcessVideo.src = artProcessVideo.dataset.mobileSrc;
+        artProcessVideo.preload = 'metadata';
+        artProcessVideo.load();
+        artProcessVideo.addEventListener('error', () => {
+          if (artProcessVideo.dataset.mobileFallbackUsed) return;
+          artProcessVideo.dataset.mobileFallbackUsed = 'true';
+          artProcessVideo.src = artProcessVideo.dataset.desktopSrc;
+          artProcessVideo.load();
+        }, { once: true });
+      } else if (!touchOptimized) {
+        artProcessVideo.preload = 'auto';
+      }
+
+      try { artProcessVideo.currentTime = 0; } catch (error) {}
+      const playRequest = artProcessVideo.play();
+      if (playRequest) {
+        playRequest.catch(() => {
+          window.clearTimeout(artCopyFallbackTimer);
+          artCopyFallbackTimer = window.setTimeout(revealArtCopy, 1800);
+        });
+      }
+    }
+
+    artProcessVideo.addEventListener('ended', revealArtCopy);
+    artProcessVideo.addEventListener('error', () => {
+      if (artHasAwakened && !artCopyRevealed) {
+        window.clearTimeout(artCopyFallbackTimer);
+        artCopyFallbackTimer = window.setTimeout(revealArtCopy, 1200);
+      }
+    });
+
+    const portfolioVideos = [...document.querySelectorAll('.film-frame video')];
+    document.querySelectorAll('.film-frame img').forEach(image => {
+      image.loading = 'lazy';
+      image.decoding = 'async';
+    });
+
+    function ensureTouchVideoSource(video) {
+      if (!touchOptimized || video.getAttribute('src')) return;
+      if (portfolio.dataset.mediaEnabled !== 'true') return;
+      video.src = video.dataset.mobileSrc;
+      video.preload = 'metadata';
+      video.load();
+      video.addEventListener('error', () => {
+        if (video.dataset.mobileFallbackUsed) return;
+        video.dataset.mobileFallbackUsed = 'true';
+        video.src = video.dataset.desktopSrc;
+        video.load();
+      }, { once: true });
+    }
+
+    function syncPortfolioVideo(video, portfolioReady = portfolio.classList.contains('is-settled')) {
+      const shouldPlay = portfolioReady && video.dataset.inView === 'true';
+      if (shouldPlay) {
+        ensureTouchVideoSource(video);
+        if (video.paused) video.play().catch(() => {});
+      } else if (!video.paused) {
+        video.pause();
+      }
+    }
+
+    const videoVisibility = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const video = entry.target;
+        video.dataset.inView = entry.isIntersecting ? 'true' : 'false';
+        if (entry.isIntersecting) ensureTouchVideoSource(video);
+        syncPortfolioVideo(video);
+      });
+    }, {
+      root: document.querySelector('.film-window'),
+      rootMargin: '55% 0px',
+      threshold: 0.01
+    });
+
+    portfolioVideos.forEach(video => {
+      video.loop = true;
+      video.preload = touchOptimized ? 'none' : 'auto';
+      if (video.closest('.stabilized-motion')) video.playbackRate = .64;
+      video.pause();
+      videoVisibility.observe(video);
+    });
+
+    if (touchOptimized) {
+      const filmWindow = document.querySelector('.film-window');
+      const colourVisibility = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) loadTouchColourLayer(entry.target);
+        });
+      }, {
+        root: filmWindow,
+        rootMargin: '22% 0px',
+        threshold: 0.01
+      });
+
+      document.querySelectorAll('.film-frame').forEach(frame => {
+        if (frame.querySelector('.mobile-colour-layer')) colourVisibility.observe(frame);
+      });
+
+      let colourReleaseTimer = 0;
+      const revealTouchedFrame = event => {
+        const frame = event.target.closest('.film-frame');
+        if (!frame) return;
+        window.clearTimeout(colourReleaseTimer);
+        document.querySelectorAll('.film-frame.is-colour').forEach(item => {
+          if (item !== frame) item.classList.remove('is-colour');
+        });
+        loadTouchColourLayer(frame);
+        frame.classList.add('is-colour');
+      };
+      const releaseTouchedFrame = () => {
+        window.clearTimeout(colourReleaseTimer);
+        colourReleaseTimer = window.setTimeout(() => {
+          document.querySelectorAll('.film-frame.is-colour').forEach(frame => {
+            frame.classList.remove('is-colour');
+          });
+        }, 1050);
+      };
+      filmWindow.addEventListener('pointerdown', revealTouchedFrame, { passive: true });
+      filmWindow.addEventListener('pointerup', releaseTouchedFrame, { passive: true });
+      filmWindow.addEventListener('pointercancel', releaseTouchedFrame, { passive: true });
+
+      document.addEventListener('visibilitychange', () => {
+        document.documentElement.classList.toggle('page-backgrounded', document.hidden);
+        if (document.hidden) {
+          artProcessVideo.pause();
+          portfolioVideos.forEach(video => video.pause());
+        } else {
+          scheduleScrollSceneUpdate();
+        }
+      });
+    }
+
+    let dpr = touchOptimized ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+    let w = 0;
+    let h = 0;
+    let t = 0;
+
+    const ripples = [];
+    const cursorMist = [];
+    let hasActivated = false;
+    let lastMistPointer = null;
+    let lastMistSpawn = 0;
+    let smoothMistX = window.innerWidth * 0.5;
+    let smoothMistY = window.innerHeight * 0.5;
+    let smoothMistUX = 1;
+    let smoothMistUY = 0;
+    let mistDpr = touchOptimized ? 1 : Math.min(window.devicePixelRatio || 1, 1.35);
+    const touchMistOrbit = {
+      active: false,
+      startedAt: 0,
+      duration: 6200,
+      centerX: 0,
+      centerY: 0,
+      radius: 0,
+      frame: 0
+    };
+
+    const MIST_PALETTE = [
+      [76, 177, 191],
+      [205, 91, 148],
+      [132, 91, 174],
+      [214, 174, 72],
+      [91, 139, 194]
+    ];
+
+    const clamp = (number, min, max) => Math.max(min, Math.min(max, number));
+    const random = (min, max) => min + Math.random() * (max - min);
+
+    const verticalGalleryWorks = [
+      {
+        src: 'assets/gallery/art-11-red-flower.jpg',
+        alt: 'A red anthurium painted against a pale textured ground'
+      },
+      {
+        src: 'assets/gallery/art-12-coral-cosmos.jpg',
+        alt: 'Coral forms beneath a vast planet-like sky'
+      },
+      {
+        src: 'assets/gallery/art-13-golden-city.jpg',
+        alt: 'A luminous imagined city beside vivid blue water'
+      },
+      {
+        src: 'assets/gallery/art-14-oval-landscape.jpg',
+        alt: 'An oval Mediterranean landscape with lemons'
+      },
+      {
+        src: 'assets/gallery/art-15-harbour.jpg',
+        alt: 'A harbour and clock tower painted in warm colour'
+      }
+    ];
+
+    if (touchOptimized) {
+      document.querySelectorAll('.gallery-work > img').forEach(image => {
+        const desktopSource = image.getAttribute('src');
+        image.dataset.desktopSrc = desktopSource;
+        prepareTouchGalleryImage(image, desktopSource);
+      });
+
+      const gatewayImage = gatewayMacro.querySelector('img');
+      if (gatewayImage) {
+        gatewayImage.src = mobileGalleryImage(gatewayImage.getAttribute('src'), 'color');
+      }
+
+      const portraitImage = skillsPortrait.querySelector('img');
+      if (portraitImage) {
+        portraitImage.src = mobileGalleryImage(portraitImage.getAttribute('src'), 'color');
+      }
+    }
+
+    const galleryVerticalSlotsElement = galleryVerticalCarousel.querySelector('.gallery-v-slots');
+    const extendedVerticalGalleryWorks = [
+      ...verticalGalleryWorks.slice(-2),
+      ...verticalGalleryWorks,
+      ...verticalGalleryWorks.slice(0, 2)
+    ];
+
+    extendedVerticalGalleryWorks.forEach((work, index) => {
+      const slot = document.createElement('figure');
+      const image = document.createElement('img');
+      slot.className = 'gallery-v-slot';
+      slot.dataset.trackIndex = String(index);
+      image.src = touchOptimized ? mobileGalleryImage(work.src, 'bw') : work.src;
+      image.alt = work.alt;
+      image.loading = Math.abs(index - 2) <= 1 ? 'eager' : 'lazy';
+      image.decoding = 'async';
+      image.draggable = false;
+      if (touchOptimized) prepareTouchGalleryImage(image, work.src);
+      slot.append(image);
+      galleryVerticalSlotsElement.append(slot);
+    });
+
+    const galleryVerticalItems = [...galleryVerticalSlotsElement.children];
+
+    let verticalGalleryIndex = 2;
+    let verticalGalleryDragging = false;
+    let verticalGalleryPointerId = null;
+    let verticalGalleryStartY = 0;
+    let verticalGalleryDragY = 0;
+    let verticalGalleryPendingY = 0;
+    let verticalGalleryDragFrame = 0;
+    let verticalGalleryLastY = 0;
+    let verticalGalleryLastAt = 0;
+    let verticalGalleryVelocity = 0;
+    let verticalGalleryAnimating = false;
+    let verticalGallerySettleTimer = 0;
+    let suppressVerticalGalleryClick = false;
+    let verticalGalleryStepPx = 1;
+    let verticalGalleryViewportPx = 1;
+    let galleryMaxShift = 0;
+
+    function realVerticalGalleryIndex() {
+      return (
+        (verticalGalleryIndex - 2) % verticalGalleryWorks.length +
+        verticalGalleryWorks.length
+      ) % verticalGalleryWorks.length;
+    }
+
+    function measureVerticalGallery() {
+      verticalGalleryStepPx = Math.max(
+        1,
+        galleryVerticalItems[0]?.getBoundingClientRect().height || window.innerHeight * .56
+      );
+      verticalGalleryViewportPx = Math.max(1, galleryVerticalCarousel.clientHeight);
+    }
+
+    function verticalGalleryBaseY() {
+      return (
+        verticalGalleryViewportPx * .5 -
+        verticalGalleryStepPx * .5 -
+        verticalGalleryIndex * verticalGalleryStepPx
+      );
+    }
+
+    function positionVerticalGallery(offset = 0) {
+      galleryVerticalSlotsElement.style.transform =
+        `translate3d(0,${verticalGalleryBaseY() + offset}px,0)`;
+    }
+
+    function updateVerticalGalleryClasses() {
+      galleryVerticalItems.forEach((slot, index) => {
+        const isActive = index === verticalGalleryIndex;
+        slot.classList.toggle('is-active', isActive);
+        slot.classList.toggle(
+          'is-neighbour',
+          Math.abs(index - verticalGalleryIndex) === 1
+        );
+        slot.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+        if (!isActive) slot.classList.remove('is-colour');
+      });
+
+      galleryVerticalCounter.textContent =
+        `${String(realVerticalGalleryIndex() + 1).padStart(2, '0')} / ${String(verticalGalleryWorks.length).padStart(2, '0')}`;
+    }
+
+    function finishVerticalGalleryMove() {
+      if (!verticalGalleryAnimating) return;
+      window.clearTimeout(verticalGallerySettleTimer);
+      galleryVerticalCarousel.classList.add('is-resetting');
+
+      if (verticalGalleryIndex === 1) {
+        verticalGalleryIndex = verticalGalleryWorks.length + 1;
+      } else if (verticalGalleryIndex === verticalGalleryWorks.length + 2) {
+        verticalGalleryIndex = 2;
+      }
+
+      galleryVerticalCarousel.classList.remove(
+        'is-settling',
+        'is-settling-back'
+      );
+      updateVerticalGalleryClasses();
+      positionVerticalGallery(0);
+      void galleryVerticalSlotsElement.offsetHeight;
+      requestAnimationFrame(() => {
+        galleryVerticalCarousel.classList.remove('is-resetting');
+        verticalGalleryAnimating = false;
+      });
+    }
+
+    function moveVerticalGallery(direction) {
+      if (verticalGalleryAnimating) return;
+      verticalGalleryAnimating = true;
+      verticalGalleryIndex += direction;
+      updateVerticalGalleryClasses();
+      galleryVerticalCarousel.classList.add('is-settling');
+
+      let completed = false;
+      const completeMove = () => {
+        if (completed) return;
+        completed = true;
+        galleryVerticalSlotsElement.removeEventListener('transitionend', onSettleEnd);
+        finishVerticalGalleryMove();
+      };
+      const onSettleEnd = event => {
+        if (event.target === galleryVerticalSlotsElement && event.propertyName === 'transform') {
+          completeMove();
+        }
+      };
+
+      galleryVerticalSlotsElement.addEventListener('transitionend', onSettleEnd);
+      verticalGallerySettleTimer = window.setTimeout(completeMove, 760);
+      void galleryVerticalSlotsElement.offsetHeight;
+      requestAnimationFrame(() => {
+        positionVerticalGallery(0);
+      });
+    }
+
+    function settleVerticalGalleryBack() {
+      if (Math.abs(verticalGalleryDragY) < .5) {
+        positionVerticalGallery(0);
+        return;
+      }
+
+      verticalGalleryAnimating = true;
+      galleryVerticalCarousel.classList.add('is-settling', 'is-settling-back');
+      let completed = false;
+      const completeSettle = () => {
+        if (completed) return;
+        completed = true;
+        window.clearTimeout(verticalGallerySettleTimer);
+        galleryVerticalSlotsElement.removeEventListener('transitionend', onSettleEnd);
+        galleryVerticalCarousel.classList.remove('is-settling', 'is-settling-back');
+        positionVerticalGallery(0);
+        verticalGalleryAnimating = false;
+      };
+      const onSettleEnd = event => {
+        if (event.target === galleryVerticalSlotsElement && event.propertyName === 'transform') {
+          completeSettle();
+        }
+      };
+
+      galleryVerticalSlotsElement.addEventListener('transitionend', onSettleEnd);
+      verticalGallerySettleTimer = window.setTimeout(completeSettle, 520);
+      void galleryVerticalSlotsElement.offsetHeight;
+      requestAnimationFrame(() => {
+        positionVerticalGallery(0);
+      });
+    }
+
+    galleryVerticalCarousel.addEventListener('pointerdown', event => {
+      if (nativeZoomActive || verticalGalleryAnimating) return;
+      verticalGalleryDragging = true;
+      verticalGalleryPointerId = event.pointerId;
+      verticalGalleryStartY = event.clientY;
+      verticalGalleryDragY = 0;
+      verticalGalleryPendingY = 0;
+      verticalGalleryLastY = event.clientY;
+      verticalGalleryLastAt = event.timeStamp;
+      verticalGalleryVelocity = 0;
+      suppressVerticalGalleryClick = false;
+      galleryVerticalCarousel.classList.add('is-dragging');
+      galleryVerticalCarousel.setPointerCapture(event.pointerId);
+    });
+
+    galleryVerticalCarousel.addEventListener('pointermove', event => {
+      if (!verticalGalleryDragging || event.pointerId !== verticalGalleryPointerId) return;
+      const dragLimit = Math.min(180, window.innerHeight * .22);
+      verticalGalleryPendingY = clamp(
+        event.clientY - verticalGalleryStartY,
+        -dragLimit,
+        dragLimit
+      );
+      const elapsed = Math.max(1, event.timeStamp - verticalGalleryLastAt);
+      const instantVelocity = (event.clientY - verticalGalleryLastY) / elapsed;
+      verticalGalleryVelocity =
+        verticalGalleryVelocity * .45 + instantVelocity * .55;
+      verticalGalleryLastY = event.clientY;
+      verticalGalleryLastAt = event.timeStamp;
+      suppressVerticalGalleryClick = Math.abs(verticalGalleryPendingY) > 7;
+
+      if (!verticalGalleryDragFrame) {
+        verticalGalleryDragFrame = requestAnimationFrame(() => {
+          verticalGalleryDragY = verticalGalleryPendingY;
+          positionVerticalGallery(verticalGalleryDragY);
+          verticalGalleryDragFrame = 0;
+        });
+      }
+    });
+
+    function releaseVerticalGallery(event) {
+      if (!verticalGalleryDragging || event.pointerId !== verticalGalleryPointerId) return;
+      verticalGalleryDragging = false;
+      galleryVerticalCarousel.classList.remove('is-dragging');
+      if (galleryVerticalCarousel.hasPointerCapture(event.pointerId)) {
+        galleryVerticalCarousel.releasePointerCapture(event.pointerId);
+      }
+
+      if (verticalGalleryDragFrame) {
+        cancelAnimationFrame(verticalGalleryDragFrame);
+        verticalGalleryDragFrame = 0;
+        verticalGalleryDragY = verticalGalleryPendingY;
+        positionVerticalGallery(verticalGalleryDragY);
+      }
+
+      if (
+        Math.abs(verticalGalleryDragY) > 44 ||
+        Math.abs(verticalGalleryVelocity) > .35
+      ) {
+        const directionSignal = Math.abs(verticalGalleryDragY) > 4
+          ? verticalGalleryDragY
+          : verticalGalleryVelocity;
+        moveVerticalGallery(directionSignal < 0 ? 1 : -1);
+      } else {
+        settleVerticalGalleryBack();
+      }
+
+      verticalGalleryPointerId = null;
+      verticalGalleryDragY = 0;
+      verticalGalleryPendingY = 0;
+      verticalGalleryVelocity = 0;
+      window.setTimeout(() => {
+        suppressVerticalGalleryClick = false;
+      }, 120);
+    }
+
+    galleryVerticalCarousel.addEventListener('pointerup', releaseVerticalGallery);
+    galleryVerticalCarousel.addEventListener('pointercancel', releaseVerticalGallery);
+
+    galleryVerticalCarousel.addEventListener('click', event => {
+      if (suppressVerticalGalleryClick || verticalGalleryAnimating) return;
+      const slot = event.target.closest('.gallery-v-slot');
+      if (!slot) return;
+      const clickedIndex = Number(slot.dataset.trackIndex);
+      if (clickedIndex < verticalGalleryIndex) {
+        moveVerticalGallery(-1);
+      } else if (clickedIndex > verticalGalleryIndex) {
+        moveVerticalGallery(1);
+      } else {
+        toggleGalleryColour(slot);
+      }
+    });
+
+    galleryVerticalCarousel.addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        moveVerticalGallery(1);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        moveVerticalGallery(-1);
+      }
+    });
+
+    measureVerticalGallery();
+    updateVerticalGalleryClasses();
+    positionVerticalGallery(0);
+    window.addEventListener('resize', () => {
+      if (nativeZoomActive) return;
+      measureVerticalGallery();
+      positionVerticalGallery(0);
+    });
+
+    document.querySelectorAll('.gallery-work').forEach(work => {
+      work.addEventListener('click', () => {
+        toggleGalleryColour(work);
+      });
+      work.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toggleGalleryColour(work);
+        }
+      });
+    });
+
+    function updateGalleryMetrics() {
+      galleryMaxShift = Math.max(0, workGalleryRail.scrollWidth - window.innerWidth);
+    }
+
+    updateGalleryMetrics();
+    window.addEventListener('load', updateGalleryMetrics);
+
+    function makeMistSprite(colour, fringe) {
+      const sprite = document.createElement('canvas');
+      sprite.width = 160;
+      sprite.height = 120;
+      const spriteCtx = sprite.getContext('2d');
+      spriteCtx.filter = 'blur(2px)';
+
+      [[74, 61, 47], [94, 51, 38], [62, 47, 34]].forEach(([x, y, radius]) => {
+        const gradient = spriteCtx.createRadialGradient(x, y, 0, x, y, radius);
+        if (fringe) {
+          gradient.addColorStop(0, `rgba(${colour.join(',')},.36)`);
+          gradient.addColorStop(.28, `rgba(${colour.join(',')},.22)`);
+          gradient.addColorStop(.68, `rgba(${colour.join(',')},.07)`);
+          gradient.addColorStop(1, `rgba(${colour.join(',')},0)`);
+        } else {
+          gradient.addColorStop(0, 'rgba(255,253,247,.37)');
+          gradient.addColorStop(.32, 'rgba(225,222,216,.20)');
+          gradient.addColorStop(.72, 'rgba(225,222,216,.055)');
+          gradient.addColorStop(1, 'rgba(235,232,224,0)');
+        }
+        spriteCtx.fillStyle = gradient;
+        spriteCtx.beginPath();
+        spriteCtx.arc(x, y, radius, 0, Math.PI * 2);
+        spriteCtx.fill();
+      });
+
+      return sprite;
+    }
+
+    const mistBodySprite = makeMistSprite([255, 253, 247], false);
+    const mistFringeSprites = MIST_PALETTE.map(colour => makeMistSprite(colour, true));
+
+    class CursorMistPuff {
+      constructor(x, y, ux, uy, fringe) {
+        const nx = -uy;
+        const ny = ux;
+        const side = Math.random() < .5 ? -1 : 1;
+        this.x = x - ux * random(5, 25) + nx * random(-20, 20);
+        this.y = y - uy * random(5, 25) + ny * random(-20, 20);
+        this.vx = -ux * random(.10, .38) + nx * side * random(.16, .52);
+        this.vy = -uy * random(.10, .38) + ny * side * random(.16, .52);
+        this.age = 0;
+        this.life = random(1600, 2450);
+        this.size = random(27, 54);
+        this.stretch = random(1.35, 2.35);
+        this.angle = Math.atan2(uy, ux) + random(-.35, .35);
+        this.fringe = fringe;
+        this.colourIndex = (Math.random() * MIST_PALETTE.length) | 0;
+        this.seed = random(0, Math.PI * 2);
+        this.spin = side * random(.00022, .00055);
+      }
+
+      draw(context, now, deltaMs) {
+        this.age += deltaMs;
+        if (this.age >= this.life) return false;
+
+        const progress = this.age / this.life;
+        const appear = Math.sin(Math.min(1, progress * 6) * Math.PI * .5);
+        const disperse = progress < .72
+          ? 1
+          : Math.pow(1 - (progress - .72) / .28, 1.04);
+        const opacity = appear * disperse;
+        const turn = this.spin * deltaMs;
+        const curvedVX = this.vx * Math.cos(turn) - this.vy * Math.sin(turn);
+        const curvedVY = this.vx * Math.sin(turn) + this.vy * Math.cos(turn);
+        this.vx = curvedVX;
+        this.vy = curvedVY;
+        this.x += this.vx * deltaMs * .06;
+        this.y += this.vy * deltaMs * .06;
+
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate(this.angle + Math.sin(this.seed + now * .0025) * .08);
+        context.scale(
+          this.stretch * (1 + progress * 1.65),
+          1 + progress * 1.42
+        );
+        context.globalAlpha = opacity;
+        const sprite = this.fringe
+          ? mistFringeSprites[this.colourIndex]
+          : mistBodySprite;
+        context.drawImage(
+          sprite,
+          -this.size * 1.35,
+          -this.size,
+          this.size * 2.7,
+          this.size * 2
+        );
+        context.restore();
+        return true;
+      }
+    }
+
+    function resize() {
+      if (nativeZoomActive) return;
+      dpr = touchOptimized ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+      mistDpr = touchOptimized ? 1 : Math.min(window.devicePixelRatio || 1, 1.35);
+      w = Math.floor(window.innerWidth * dpr);
+      h = Math.floor(window.innerHeight * dpr);
+      canvas.width = w;
+      canvas.height = h;
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      cursorMistCanvas.width = Math.floor(window.innerWidth * mistDpr);
+      cursorMistCanvas.height = Math.floor(window.innerHeight * mistDpr);
+      cursorMistCanvas.style.width = window.innerWidth + 'px';
+      cursorMistCanvas.style.height = window.innerHeight + 'px';
+      cursorMistCtx.setTransform(mistDpr, 0, 0, mistDpr, 0, 0);
+      updateGalleryMetrics();
+    }
+
+    function lerp(a, b, n) {
+      return a + (b - a) * n;
+    }
+
+    function addRipple(x, y, power = 1.0, revealDelay = 1200) {
+      ripples.push({
+        x,
+        y,
+        age: 0,
+        life: 6.4 + Math.random() * 0.8,
+        power,
+        speed: 94 + Math.random() * 16,
+      });
+
+      // Stage 1: only water for two seconds.
+      page.classList.remove('reveal');
+      page.classList.add('hide-hint');
+
+      clearTimeout(window.__revealTimer);
+
+      // Stage 2: the title slowly appears after the ripple has had time to spread.
+      window.__revealTimer = setTimeout(() => {
+        page.classList.add('reveal');
+        document.body.classList.add('scroll-ready');
+        document.documentElement.classList.add('scroll-ready');
+      }, revealDelay);
+
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    document.addEventListener('pointermove', (e) => {
+      if (hasActivated || e.pointerType === 'touch') return;
+      spawnCursorMist(e);
+    });
+
+    document.addEventListener('pointerleave', () => {
+      lastMistPointer = null;
+    });
+
+    document.addEventListener('pointerdown', (e) => {
+      if (hasActivated) return;
+      hasActivated = true;
+      lastMistPointer = null;
+      const touchPresentation =
+        e.pointerType === 'touch' &&
+        window.matchMedia('(hover: none), (pointer: coarse)').matches;
+      addRipple(e.clientX, e.clientY, 1.0, touchPresentation ? 0 : 1200);
+      if (touchPresentation) startTouchMistOrbit();
+    });
+
+    function scenePhase(units, start, end) {
+      const value = clamp((units - start) / (end - start), 0, 1);
+      return value * value * (3 - 2 * value);
+    }
+
+    function linearScenePhase(units, start, end) {
+      return clamp((units - start) / (end - start), 0, 1);
+    }
+
+    function currentNativeZoomScale() {
+      return window.visualViewport ? window.visualViewport.scale : 1;
+    }
+
+    function cancelSceneDragsForZoom() {
+      if (artDragFrame) {
+        cancelAnimationFrame(artDragFrame);
+        artDragFrame = 0;
+      }
+      artDragging = false;
+      artDragPointerId = null;
+      artDragX = 0;
+      artPendingDragX = 0;
+      artCarousel.classList.remove('is-dragging');
+      positionArtCarousel(0, false);
+
+      if (verticalGalleryDragFrame) {
+        cancelAnimationFrame(verticalGalleryDragFrame);
+        verticalGalleryDragFrame = 0;
+      }
+      verticalGalleryDragging = false;
+      verticalGalleryPointerId = null;
+      verticalGalleryDragY = 0;
+      verticalGalleryPendingY = 0;
+      verticalGalleryVelocity = 0;
+      galleryVerticalCarousel.classList.remove(
+        'is-dragging',
+        'is-settling',
+        'is-settling-back'
+      );
+      positionVerticalGallery(0);
+    }
+
+    function beginNativeZoom() {
+      window.clearTimeout(nativeZoomReleaseTimer);
+      if (nativeZoomActive) return;
+      nativeZoomActive = true;
+      nativeZoomAnchorY = window.scrollY;
+      document.body.classList.add('native-zoom-active');
+      cancelSceneDragsForZoom();
+      artProcessVideo.pause();
+      portfolioVideos.forEach(video => video.pause());
+    }
+
+    function finishNativeZoom() {
+      window.clearTimeout(nativeZoomReleaseTimer);
+      if (!nativeZoomActive || currentNativeZoomScale() > 1.01) return;
+      nativeZoomActive = false;
+      document.body.classList.remove('native-zoom-active');
+      window.scrollTo(0, nativeZoomAnchorY);
+      requestAnimationFrame(() => {
+        resize();
+        measureArtCarousel();
+        positionArtCarousel(0, false);
+        measureVerticalGallery();
+        positionVerticalGallery(0);
+        updateScrollScene();
+      });
+    }
+
+    function scheduleNativeZoomFinish(delay = 180) {
+      window.clearTimeout(nativeZoomReleaseTimer);
+      nativeZoomReleaseTimer = window.setTimeout(finishNativeZoom, delay);
+    }
+
+    document.addEventListener('touchstart', event => {
+      if (event.touches.length > 1) beginNativeZoom();
+    }, { capture: true, passive: true });
+
+    document.addEventListener('touchmove', event => {
+      if (event.touches.length > 1) beginNativeZoom();
+    }, { capture: true, passive: true });
+
+    document.addEventListener('touchend', event => {
+      if (event.touches.length < 2) scheduleNativeZoomFinish();
+    }, { capture: true, passive: true });
+
+    document.addEventListener('touchcancel', () => {
+      scheduleNativeZoomFinish();
+    }, { capture: true, passive: true });
+
+    if (window.visualViewport) {
+      const trackNativeZoom = () => {
+        if (currentNativeZoomScale() > 1.01) {
+          beginNativeZoom();
+        } else {
+          scheduleNativeZoomFinish();
+        }
+      };
+      window.visualViewport.addEventListener('resize', trackNativeZoom, { passive: true });
+      window.visualViewport.addEventListener('scroll', trackNativeZoom, { passive: true });
+    }
+
+    function updateScrollScene() {
+      if (nativeZoomActive) return;
+      const units = window.scrollY / Math.max(window.innerHeight, 1);
+      const artEnter = scenePhase(units, .04, .82);
+      const heroExit = scenePhase(units, .04, .52);
+      const textileEnter = scenePhase(units, 1.18, 1.96);
+      const gatewayEnter = scenePhase(units, 2.32, 2.86);
+      const gatewayWordReveal = scenePhase(units, 2.95, 3.08);
+      const gatewayMotion = scenePhase(units, 2.95, 3.72);
+      const macroReveal = scenePhase(units, 3.08, 3.52);
+      const macroExit = scenePhase(units, 3.58, 4.05);
+      const gatewayDark = scenePhase(units, 3.38, 3.95);
+      const galleryEnter = scenePhase(units, 3.76, 4.18);
+      const galleryTravel = linearScenePhase(units, 4.20, 8.55);
+      const skillsEnter = scenePhase(units, 8.62, 9.35);
+      const skillsPhotoEnter = scenePhase(units, 8.66, 9.12);
+      const skillsCopyEnter = scenePhase(units, 8.82, 9.28);
+      const mobilePortrait =
+        touchOptimized &&
+        window.matchMedia('(max-width: 1400px) and (orientation: portrait)').matches;
+      const compactTouchLandscape =
+        touchOptimized &&
+        window.matchMedia('(max-width: 1400px) and (max-height: 620px) and (orientation: landscape)').matches;
+      const artMobileTravel = mobilePortrait ? linearScenePhase(units, .50, 1.12) : 0;
+      const skillsMobileTravel = mobilePortrait ? linearScenePhase(units, 9.22, 10.08) : 0;
+      const artVisible = artEnter > .005 && textileEnter < .999;
+      const artInteractive =
+        artEnter > .28 &&
+        textileEnter < .08 &&
+        artScene.classList.contains('is-ready');
+      const textileVisible = textileEnter > .005 && gatewayEnter < .999;
+      const textileInteractive = textileEnter > .92 && gatewayEnter < .07;
+      const textileSettled = textileEnter > .92 && gatewayEnter < .08;
+      const gatewayVisible = gatewayEnter > .005 && galleryEnter < .999;
+      const galleryVisible = galleryEnter > .005 && skillsEnter < .999;
+      const galleryInteractive = galleryEnter > .92 && skillsEnter < .08;
+      const skillsVisible = skillsEnter > .005;
+
+      hero.style.transform = `translate3d(0, ${-14 * heroExit}vh, 0) scale(${1 - heroExit * .03})`;
+      hero.style.opacity = String(1 - heroExit);
+
+      artScene.style.transform = `translate3d(${-17 * textileEnter}vw, ${(1 - artEnter) * 104}vh, 0) scale(${1 - textileEnter * .018})`;
+      artScene.style.opacity = String(clamp(artEnter / .08, 0, 1));
+      artStage.style.transform = mobilePortrait
+        ? `translate3d(0, ${-85 * artMobileTravel}svh, 0)`
+        : '';
+      artScene.style.setProperty(
+        '--art-mobile-shift',
+        mobilePortrait ? `${-85 * artMobileTravel}svh` : '0svh'
+      );
+
+      const textileExit = scenePhase(units, 2.82, 3.04);
+      portfolio.style.transform =
+        `translate3d(${(1 - textileEnter) * 102}vw, ${touchOptimized ? 0 : -5 * gatewayEnter}vh, 0) scale(${1 - gatewayEnter * .012})`;
+      portfolio.style.opacity = String(textileEnter * (1 - textileExit));
+
+      galleryGateway.style.transform = `translate3d(0, ${(1 - gatewayEnter) * 103}vh, 0)`;
+      gatewayArtWord.style.transform =
+        `translate3d(${-76 + gatewayMotion * 210}vw, -50%, 0)`;
+      gatewayArtWord.style.opacity = String(
+        gatewayWordReveal * (1 - scenePhase(units, 3.53, 3.84))
+      );
+      gatewayMacro.style.transform =
+        `translate3d(${-55 + macroReveal * 62 + macroExit * 112}vw, 0, 0)`;
+      gatewayMacro.style.clipPath =
+        `inset(0 ${100 * (1 - macroReveal)}% 0 0)`;
+      gatewayMacro.style.opacity = String(1 - macroExit * .32);
+      gatewayDarkWipe.style.transform =
+        `translate3d(${-103 + gatewayDark * 103}vw, 0, 0)`;
+
+      workGallery.style.opacity = String(galleryEnter);
+      workGallery.style.clipPath =
+        `inset(0 ${100 * (1 - galleryEnter)}% 0 0)`;
+      workGalleryRail.style.transform =
+        `translate3d(${-galleryMaxShift * galleryTravel}px, 0, 0)`;
+      galleryProgressBar.style.transform = `scaleX(${galleryTravel})`;
+
+      skillsScene.style.transform =
+        `translate3d(0, ${(1 - skillsEnter) * 103}vh, 0)`;
+      skillsPortrait.style.opacity = String(skillsPhotoEnter);
+      const skillsMobileBottomGap = Math.max(
+        78,
+        Math.min(112, window.innerHeight * .11)
+      );
+      const skillsMobileTargetTop = Math.max(
+        window.innerHeight * .055,
+        window.innerHeight - skillsCopy.offsetHeight - skillsMobileBottomGap
+      );
+      const skillsMobileShift = mobilePortrait
+        ? Math.max(0, skillsCopy.offsetTop - skillsMobileTargetTop) * skillsMobileTravel
+        : 0;
+      skillsPortrait.style.transform = mobilePortrait
+        ? `translate3d(0, ${-skillsMobileShift}px, 0)`
+        : compactTouchLandscape
+          ? 'translate3d(0, 0, 0)'
+          : `translate3d(${(1 - skillsPhotoEnter) * 16}vw, 0, 0)`;
+      skillsPortrait.style.clipPath = touchOptimized
+        ? 'inset(0)'
+        : `inset(0 0 0 ${100 * (1 - skillsPhotoEnter)}%)`;
+      skillsCopy.style.opacity = String(skillsCopyEnter);
+      skillsCopy.style.transform = mobilePortrait
+        ? `translate3d(${(1 - skillsCopyEnter) * -20}px, ${-skillsMobileShift}px, 0)`
+        : `translate3d(${(1 - skillsCopyEnter) * -20}px, -50%, 0)`;
+      waterCanvas.style.opacity = String(.62 * (1 - artEnter));
+
+      artScene.classList.toggle('is-visible', artVisible);
+      artScene.classList.toggle('is-interactive', artInteractive);
+      portfolio.classList.toggle('is-visible', textileVisible);
+      portfolio.classList.toggle('is-interactive', textileInteractive);
+      portfolio.classList.toggle('is-settled', textileSettled);
+      galleryGateway.classList.toggle('is-visible', gatewayVisible);
+      workGallery.classList.toggle('is-visible', galleryVisible);
+      workGallery.classList.toggle('is-interactive', galleryInteractive);
+      skillsScene.classList.toggle('is-visible', skillsVisible);
+      skillsScene.classList.toggle('is-interactive', skillsEnter > .9);
+      document.body.classList.toggle('art-visible', artEnter > .48 && textileEnter < .58);
+      document.body.classList.toggle('portfolio-visible', textileEnter > .55);
+      document.body.classList.toggle('gallery-visible', galleryVisible);
+      document.body.classList.toggle('skills-visible', skillsVisible);
+
+      if (artEnter > .28 && !artHasAwakened) {
+        startArtSequence();
+      }
+
+      if (touchOptimized && textileEnter > .04) {
+        portfolio.dataset.mediaEnabled = 'true';
+      }
+
+      const artVideoShouldPlay = artVisible && artHasAwakened && !artProcessVideo.ended && textileEnter < .08;
+      if (artVideoShouldPlay && artProcessVideo.paused) {
+        artProcessVideo.play().catch(() => {});
+      } else if (!artVideoShouldPlay && !artProcessVideo.paused) {
+        artProcessVideo.pause();
+      }
+
+      portfolioVideos.forEach(video => syncPortfolioVideo(video, textileSettled));
+    }
+
+    let scrollSceneFrame = 0;
+    function scheduleScrollSceneUpdate() {
+      if (nativeZoomActive) return;
+      if (scrollSceneFrame) return;
+      scrollSceneFrame = requestAnimationFrame(() => {
+        scrollSceneFrame = 0;
+        updateScrollScene();
+      });
+    }
+
+    window.addEventListener('scroll', scheduleScrollSceneUpdate, { passive: true });
+    window.addEventListener('resize', scheduleScrollSceneUpdate, { passive: true });
+    updateScrollScene();
+
+    let bottomReachedAt = 0;
+    let endScrollIntent = 0;
+    let loopingHome = false;
+    let loopInputLockedUntil = 0;
+
+    function isAtDocumentEnd() {
+      const root = document.scrollingElement;
+      return root.scrollTop >= root.scrollHeight - window.innerHeight - 2;
+    }
+
+    function trackDocumentEnd() {
+      if (nativeZoomActive) return;
+      if (isAtDocumentEnd()) {
+        if (!bottomReachedAt) bottomReachedAt = performance.now();
+      } else {
+        bottomReachedAt = 0;
+        endScrollIntent = 0;
+      }
+    }
+
+    function resetJourneyForReplay() {
+      window.clearTimeout(artCopyFallbackTimer);
+      artProcessVideo.pause();
+      try {
+        artProcessVideo.currentTime = 0;
+      } catch (error) {}
+      artHasAwakened = false;
+      artCopyRevealed = false;
+      artScene.classList.remove('is-awake', 'is-copy-visible', 'is-ready');
+
+      artCarouselIndex = 2;
+      artCarouselAnimating = false;
+      window.clearTimeout(artCarouselSettleTimer);
+      updateArtCarouselClasses();
+      positionArtCarousel(0, false);
+
+      window.clearTimeout(verticalGallerySettleTimer);
+      verticalGalleryIndex = 2;
+      verticalGalleryAnimating = false;
+      verticalGalleryDragging = false;
+      galleryVerticalCarousel.classList.remove(
+        'is-dragging',
+        'is-settling',
+        'is-settling-back',
+        'is-resetting'
+      );
+      galleryVerticalItems.forEach(slot => slot.classList.remove('is-colour'));
+      updateVerticalGalleryClasses();
+      positionVerticalGallery(0);
+      document.querySelectorAll('.gallery-work.is-colour').forEach(work => {
+        work.classList.remove('is-colour');
+      });
+    }
+
+    function returnHomeFromEnd() {
+      if (loopingHome) return;
+      loopingHome = true;
+      endScrollIntent = 0;
+      cycleCurtain.classList.add('is-active');
+
+      window.setTimeout(() => {
+        window.scrollTo(0, 0);
+        resetJourneyForReplay();
+        updateScrollScene();
+        bottomReachedAt = 0;
+        loopInputLockedUntil = performance.now() + 1100;
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            cycleCurtain.classList.remove('is-active');
+          });
+        });
+
+        window.setTimeout(() => {
+          loopingHome = false;
+        }, 1100);
+      }, 430);
+    }
+
+    window.addEventListener('scroll', trackDocumentEnd, { passive: true });
+    trackDocumentEnd();
+
+    window.addEventListener('wheel', event => {
+      // Trackpad pinch-to-zoom arrives as a wheel event with a modifier.
+      // Leave it entirely to the browser so it can never advance or reset a scene.
+      if (event.ctrlKey || event.metaKey) {
+        endScrollIntent = 0;
+        return;
+      }
+
+      if (event.deltaY <= 0) return;
+
+      if (loopingHome || performance.now() < loopInputLockedUntil) {
+        event.preventDefault();
+        return;
+      }
+
+      if (!isAtDocumentEnd()) return;
+
+      const units = window.scrollY / Math.max(window.innerHeight, 1);
+      if (units < 9.45) return;
+
+      if (!bottomReachedAt) {
+        bottomReachedAt = performance.now();
+        return;
+      }
+
+      if (performance.now() - bottomReachedAt < 450) return;
+
+      const normalizedDelta =
+        event.deltaMode === 1 ? event.deltaY * 16 :
+        event.deltaMode === 2 ? event.deltaY * window.innerHeight :
+        event.deltaY;
+      endScrollIntent += Math.min(Math.max(normalizedDelta, 0), 80);
+
+      if (endScrollIntent >= 120) {
+        event.preventDefault();
+        returnHomeFromEnd();
+      }
+    }, { passive: false });
+
+    function spawnCursorMist(event, countLimit = 2) {
+      const now = performance.now();
+      if (!lastMistPointer) {
+        lastMistPointer = { x: event.clientX, y: event.clientY, time: now };
+        smoothMistX = event.clientX;
+        smoothMistY = event.clientY;
+        return;
+      }
+
+      const dx = event.clientX - lastMistPointer.x;
+      const dy = event.clientY - lastMistPointer.y;
+      const distance = Math.hypot(dx, dy);
+      if (distance < 2 || now - lastMistSpawn < 14) return;
+
+      smoothMistX += (event.clientX - smoothMistX) * .34;
+      smoothMistY += (event.clientY - smoothMistY) * .34;
+      const rawUX = dx / distance;
+      const rawUY = dy / distance;
+      smoothMistUX += (rawUX - smoothMistUX) * .15;
+      smoothMistUY += (rawUY - smoothMistUY) * .15;
+      const directionLength = Math.hypot(smoothMistUX, smoothMistUY) || 1;
+      const ux = smoothMistUX / directionLength;
+      const uy = smoothMistUY / directionLength;
+      const count = clamp(Math.round(distance / 12), 1, Math.max(1, countLimit));
+
+      for (let index = 0; index < count; index++) {
+        const x = smoothMistX - ux * (count - index - 1) * 4;
+        const y = smoothMistY - uy * (count - index - 1) * 4;
+        cursorMist.push(new CursorMistPuff(x, y, ux, uy, false));
+        cursorMist.push(new CursorMistPuff(x, y, ux, uy, true));
+      }
+
+      if (cursorMist.length > 56) {
+        cursorMist.splice(0, cursorMist.length - 56);
+      }
+      lastMistPointer = { x: event.clientX, y: event.clientY, time: now };
+      lastMistSpawn = now;
+    }
+
+    function startTouchMistOrbit() {
+      const title = document.querySelector('.title-wrap');
+      const bounds = title.getBoundingClientRect();
+      touchMistOrbit.centerX = bounds.left + bounds.width * .5;
+      touchMistOrbit.centerY = bounds.top + bounds.height * .45;
+      touchMistOrbit.radius = clamp(
+        Math.min(window.innerWidth * .29, window.innerHeight * .245),
+        86,
+        178
+      );
+      touchMistOrbit.startedAt = performance.now();
+      touchMistOrbit.frame = 0;
+      touchMistOrbit.active = true;
+      lastMistPointer = null;
+      lastMistSpawn = 0;
+    }
+
+    function updateTouchMistOrbit(now) {
+      if (!touchMistOrbit.active) return;
+
+      const progress = clamp(
+        (now - touchMistOrbit.startedAt) / touchMistOrbit.duration,
+        0,
+        1
+      );
+      let pathProgress = 0;
+      let radialDeparture = 0;
+
+      if (progress < .50) {
+        const phase = progress / .50;
+        const smoothPhase = phase * phase * (3 - 2 * phase);
+        pathProgress = .30 * smoothPhase;
+      } else if (progress < .78) {
+        const phase = (progress - .50) / .28;
+        const forwardRush = 1 - Math.pow(1 - phase, 3);
+        pathProgress = .30 + .30 * forwardRush;
+        radialDeparture = touchMistOrbit.radius * (
+          Math.sin(phase * Math.PI) * .085 +
+          Math.sin(phase * Math.PI * 2) * .018
+        );
+      } else {
+        const phase = (progress - .78) / .22;
+        pathProgress = .60 + .40 * phase;
+      }
+
+      const angle = -Math.PI * .5 + pathProgress * Math.PI * 2;
+      const radius = touchMistOrbit.radius + radialDeparture;
+      const x = touchMistOrbit.centerX + Math.cos(angle) * radius;
+      const y = touchMistOrbit.centerY + Math.sin(angle) * radius;
+      touchMistOrbit.frame += 1;
+
+      let shouldSpawn = true;
+      let countLimit = 2;
+      if (progress >= .78) {
+        const finalPhase = (progress - .78) / .22;
+        const stride = finalPhase < .42 ? 2 : finalPhase < .76 ? 3 : 4;
+        shouldSpawn = touchMistOrbit.frame % stride === 0;
+        countLimit = 1;
+      }
+
+      if (shouldSpawn) {
+        spawnCursorMist({ clientX: x, clientY: y }, countLimit);
+      }
+
+      if (progress >= 1) {
+        touchMistOrbit.active = false;
+        lastMistPointer = null;
+      }
+    }
+
+    let lastMistFrameAt = performance.now();
+    function drawCursorMist(ms) {
+      const deltaMs = Math.min(32, ms - lastMistFrameAt || 16);
+      lastMistFrameAt = ms;
+      cursorMistCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      for (let index = cursorMist.length - 1; index >= 0; index--) {
+        if (!cursorMist[index].draw(cursorMistCtx, ms, deltaMs)) {
+          cursorMist.splice(index, 1);
+        }
+      }
+    }
+
+    function drawWaterWash(time) {
+      const ww = window.innerWidth;
+      const hh = window.innerHeight;
+
+      // transparent overlay — not literal water, more like an ink/wet wash
+      for (let i = 0; i < 8; i++) {
+        const offset = i * 0.85;
+        const alpha = 0.022 - i * 0.0017;
+        ctx.beginPath();
+        for (let x = -40; x <= ww + 40; x += 18) {
+          const y =
+            hh * (0.15 + i * 0.1) +
+            Math.sin(x * 0.008 + time * 0.0012 + offset) * (8 + i * 2.5) +
+            Math.cos(x * 0.0034 - time * 0.0009 + offset * 0.6) * (5 + i * 1.7);
+          if (x === -40) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.lineTo(ww + 40, hh + 80);
+        ctx.lineTo(-40, hh + 80);
+        ctx.closePath();
+        ctx.fillStyle = `rgba(103, 84, 111, ${alpha})`;
+        ctx.fill();
+      }
+
+      // darker edge pools, to create mystery
+      const leftGrad = ctx.createLinearGradient(0, 0, ww * 0.22, 0);
+      leftGrad.addColorStop(0, 'rgba(76, 41, 31, 0.055)');
+      leftGrad.addColorStop(1, 'rgba(76, 41, 31, 0)');
+      ctx.fillStyle = leftGrad;
+      ctx.fillRect(0, 0, ww * 0.25, hh);
+
+      const rightGrad = ctx.createLinearGradient(ww, 0, ww * 0.78, 0);
+      rightGrad.addColorStop(0, 'rgba(56, 32, 62, 0.05)');
+      rightGrad.addColorStop(1, 'rgba(56, 32, 62, 0)');
+      ctx.fillStyle = rightGrad;
+      ctx.fillRect(ww * 0.75, 0, ww * 0.25, hh);
+    }
+
+    function drawRipple(r) {
+      const p = r.age / r.life;
+      if (p >= 1) return;
+
+      const radius = r.speed * r.age;
+      const fade = Math.pow(1 - p, 1.7);
+
+      // slow expanding ring
+      ctx.beginPath();
+      ctx.lineWidth = lerp(1.8, 0.6, p);
+      ctx.strokeStyle = `rgba(103, 76, 116, ${0.34 * fade * r.power})`;
+      ctx.arc(r.x, r.y, radius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // second softer ring
+      ctx.beginPath();
+      ctx.lineWidth = lerp(1.3, 0.5, p);
+      ctx.strokeStyle = `rgba(161, 92, 74, ${0.22 * fade * r.power})`;
+      ctx.arc(r.x, r.y, radius * 1.35, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // a very soft wet bloom
+      const g = ctx.createRadialGradient(r.x, r.y, radius * 0.08, r.x, r.y, radius * 1.7);
+      g.addColorStop(0, `rgba(217, 205, 225, ${0.10 * fade * r.power})`);
+      g.addColorStop(0.3, `rgba(145, 105, 140, ${0.06 * fade * r.power})`);
+      g.addColorStop(1, 'rgba(151, 120, 144, 0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(r.x, r.y, radius * 1.7, 0, Math.PI * 2);
+      ctx.fill();
+
+      // subtle wave streak distortion
+      ctx.beginPath();
+      for (let a = 0; a < Math.PI * 2; a += Math.PI / 24) {
+        const irregular = Math.sin(a * 5 + r.age * 4.0) * 4 + Math.cos(a * 3 - r.age * 2.5) * 3;
+        const rr = radius * 0.82 + irregular;
+        const xx = r.x + Math.cos(a) * rr;
+        const yy = r.y + Math.sin(a) * rr;
+        if (a === 0) ctx.moveTo(xx, yy);
+        else ctx.lineTo(xx, yy);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(80, 57, 99, ${0.14 * fade * r.power})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+
+    let lastTouchCanvasAt = 0;
+    function animate(ms) {
+      if (touchOptimized && ms - lastTouchCanvasAt < 24) {
+        requestAnimationFrame(animate);
+        return;
+      }
+      const touchFrameSeconds = touchOptimized
+        ? Math.min(.034, Math.max(.016, (ms - lastTouchCanvasAt) / 1000 || .024))
+        : .016;
+      if (touchOptimized) lastTouchCanvasAt = ms;
+      t = ms;
+      const ww = window.innerWidth;
+      const hh = window.innerHeight;
+
+      ctx.clearRect(0, 0, ww, hh);
+
+      drawWaterWash(ms);
+
+      updateTouchMistOrbit(ms);
+      drawCursorMist(ms);
+
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const r = ripples[i];
+        r.age += touchFrameSeconds;
+        drawRipple(r);
+
+        if (r.age >= r.life) {
+          ripples.splice(i, 1);
+        }
+      }
+
+      if (!hasActivated || ripples.length || cursorMist.length || touchMistOrbit.active) {
+        requestAnimationFrame(animate);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
