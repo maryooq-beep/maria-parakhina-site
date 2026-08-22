@@ -555,6 +555,12 @@
       transform: scale(1);
     }
 
+    .art-slide img.art-slide-image--contain {
+      object-fit: contain;
+      object-position: center;
+      transform: none;
+    }
+
     .art-carousel.is-dragging .art-slide-frame,
     .art-carousel.is-dragging .art-slide img {
       transition: none !important;
@@ -2631,7 +2637,7 @@
           <div class="art-carousel-track"></div>
           <div class="art-carousel-meta">
             <span>Drag to explore</span>
-            <span class="art-counter" aria-live="polite">01 / 05</span>
+            <span class="art-counter" aria-live="polite">01 / 09</span>
           </div>
         </div>
       </div>
@@ -2985,6 +2991,23 @@
 
     const artLooks = [
       {
+        src: 'assets/art/fashion-study-01.jpg',
+        alt: 'Fashion sketch of a long dress with a beige cape'
+      },
+      {
+        src: 'assets/art/fashion-study-02.jpg',
+        alt: 'Fashion sketch of a short pink dress with a brown cape'
+      },
+      {
+        src: 'assets/art/fashion-study-03.jpg',
+        alt: 'Fashion study sheet with three looks'
+      },
+      {
+        src: 'assets/art/fashion-study-04.jpg',
+        alt: 'Wide black-and-white fashion sketch study sheet',
+        contain: true
+      },
+      {
         src: 'assets/art/look-02-black-dress.jpg',
         alt: 'Fashion sketch of a voluminous black evening silhouette'
       },
@@ -3020,6 +3043,7 @@
       frame.className = 'art-slide-frame';
       image.src = touchOptimized ? mobileArtImage(look.src) : look.src;
       image.alt = look.alt;
+      if (look.contain) image.classList.add('art-slide-image--contain');
       image.loading = 'eager';
       image.decoding = 'async';
       image.draggable = false;
